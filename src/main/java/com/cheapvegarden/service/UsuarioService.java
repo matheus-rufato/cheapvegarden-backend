@@ -24,7 +24,7 @@ public class UsuarioService {
         try {
             Usuario usuario = converter.toEntity(usuarioDto);
             dao.persistAndFlush(usuario);
-            return usuarioDto;
+            return converter.toDto(usuario);
         } catch (Exception e) {
             throw new Exception(e.getMessage(), e.getCause());
         }

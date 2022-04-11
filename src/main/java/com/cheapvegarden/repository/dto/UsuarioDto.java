@@ -9,6 +9,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UsuarioDto {
+
+    private Long id;
     
     @Size(max = 50)
     @NotNull
