@@ -12,16 +12,18 @@ import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 
 @ApplicationScoped
 public class UsuarioDao implements PanacheRepositoryBase<Usuario, Long> {
-    
+
     @Inject
     EntityManager entityManager;
 
     public List<Usuario> buscarUsuarioPorNome(String nome) throws Exception {
         try {
-            return (List<Usuario>) entityManager
-                            .createQuery("SELECT usuario FROM Usuario AS usuario WHERE Nome = :nome", Usuario.class)
-                            .setParameter("nome", nome)
-                            .getResultList();
+            return entityManager
+                    .createQuery(
+                            "SELECT usuario FROM Usuario AS usuario WHERE Nome = :nome",
+                            Usuario.class)
+                    .setParameter("nome", nome)
+                    .getResultList();
         } catch (Exception e) {
             throw new Exception(e.getMessage(), e.getCause());
         }

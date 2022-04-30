@@ -12,20 +12,20 @@ import com.cheapvegarden.service.LogService;
 @Path("/log")
 @ApplicationScoped
 public class LogResource {
-    
+
     @Inject
     LogService service;
 
     @POST
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(LogDto logDto) throws Exception {
+    public Response criar(LogDto logDto) throws Exception {
         return Response.ok(service.salvar(logDto)).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response readAll() throws Exception {
+    public Response ler() throws Exception {
         return Response.ok(service.listarLog()).build();
     }
 }

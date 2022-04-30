@@ -15,19 +15,23 @@ public class ControleConverter implements Converter<Controle, ControleDto> {
     @Override
     public ControleDto toDto(Controle entity) {
         return ControleDto.builder()
-        .id(entity.getId())
-        .umidadeMaxima(entity.getUmidadeMaxima())
-        .umidadeMinima(entity.getUmidadeMinima())
-        .build();
+                .id(entity.getId())
+                .statusSolenoide(entity.getStatusSolenoide())
+                .temperaturaClima(entity.getTemperaturaClima())
+                .umidadeClima(entity.getUmidadeClima())
+                .umidadeSolo(entity.getUmidadeSolo())
+                .build();
     }
 
     @Override
     public Controle toEntity(ControleDto dto) throws IllegalAccessException {
         return Controle.builder()
-        .id(dto.getId())
-        .umidadeMaxima(dto.getUmidadeMaxima())
-        .umidadeMinima(dto.getUmidadeMinima())
-        .build();
+                .id(dto.getId())
+                .statusSolenoide(dto.getStatusSolenoide())
+                .temperaturaClima(dto.getTemperaturaClima())
+                .umidadeClima(dto.getUmidadeClima())
+                .umidadeSolo(dto.getUmidadeSolo())
+                .build();
     }
 
     @Override
@@ -36,5 +40,5 @@ public class ControleConverter implements Converter<Controle, ControleDto> {
         entityList.forEach(entity -> controleDtoList.add(toDto(entity)));
         return controleDtoList;
     }
-    
+
 }

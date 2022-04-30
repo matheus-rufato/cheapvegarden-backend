@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity(name = "Usuario")
 public class Usuario {
-    
+
     @Id
     @Column(name = "ID")
     @GeneratedValue(generator = "native", strategy = GenerationType.IDENTITY)
@@ -30,10 +30,11 @@ public class Usuario {
     @Column(name = "Email")
     @NotNull
     @Size(max = 50)
+    @Email
     private String email;
 
     @Column(name = "Senha")
     @NotNull
-    @Size(max = 6, min = 6)
+    @Size(max = 10, min = 8)
     private String senha;
 }

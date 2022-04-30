@@ -11,18 +11,18 @@ import lombok.*;
 @NoArgsConstructor
 @Entity(name = "Cultura")
 public class Cultura {
-    
+
     @Id
     @Column(name = "ID")
     @GeneratedValue(generator = "native", strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Id_controle")
     private Controle controle;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Id_setup")
+    @JoinColumn(name = "ID_setup")
     private Setup setup;
 
     @Column(name = "Nome")

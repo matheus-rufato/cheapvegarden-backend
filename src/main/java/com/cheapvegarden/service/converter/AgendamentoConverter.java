@@ -16,21 +16,21 @@ public class AgendamentoConverter implements Converter<Agendamento, AgendamentoD
     @Override
     public AgendamentoDto toDto(Agendamento entity) {
         return AgendamentoDto.builder()
-        .id(entity.getId())
-        .culturaId(entity.getCultura().getId())
-        .horaInicio(entity.getHoraInicio())
-        .horaFim(entity.getHoraFim())
-        .build();
+                .id(entity.getId())
+                .culturaId(entity.getCultura().getId())
+                .horaInicio(entity.getHoraInicio())
+                .horaFim(entity.getHoraFim())
+                .build();
     }
 
     @Override
     public Agendamento toEntity(AgendamentoDto dto) throws IllegalAccessException {
         return Agendamento.builder()
-        .id(dto.getId())
-        .cultura(Cultura.builder().id(dto.getCulturaId()).build())
-        .horaInicio(dto.getHoraInicio())
-        .horaFim(dto.getHoraFim())
-        .build();
+                .id(dto.getId())
+                .cultura(Cultura.builder().id(dto.getCulturaId()).build())
+                .horaInicio(dto.getHoraInicio())
+                .horaFim(dto.getHoraFim())
+                .build();
     }
 
     @Override
@@ -38,5 +38,5 @@ public class AgendamentoConverter implements Converter<Agendamento, AgendamentoD
         List<AgendamentoDto> agendamentoDtoList = new ArrayList<>();
         entityList.forEach(entity -> agendamentoDtoList.add(toDto(entity)));
         return agendamentoDtoList;
-    }    
+    }
 }

@@ -13,7 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity(name = "Agendamento")
 public class Agendamento {
-    
+
     @Id
     @Column(name = "ID")
     @GeneratedValue(generator = "native", strategy = GenerationType.IDENTITY)
@@ -31,5 +31,4 @@ public class Agendamento {
     @Column(name = "Hora_fim")
     @NotNull
     private LocalTime horaFim;
-
 }

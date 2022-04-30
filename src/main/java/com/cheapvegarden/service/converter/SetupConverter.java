@@ -15,19 +15,23 @@ public class SetupConverter implements Converter<Setup, SetupDto> {
     @Override
     public SetupDto toDto(Setup entity) {
         return SetupDto.builder()
-        .id(entity.getId())
-        .status(entity.getStatus())
-        .tipoControle(entity.getTipoControle())
-        .build();
+                .id(entity.getId())
+                .status(entity.getStatus())
+                .tipoControle(entity.getTipoControle())
+                .umidadeMaxima(entity.getUmidadeMaxima())
+                .umidadeMinima(entity.getUmidadeMinima())
+                .build();
     }
 
     @Override
     public Setup toEntity(SetupDto dto) throws IllegalAccessException {
         return Setup.builder()
-        .id(dto.getId())
-        .status(dto.getStatus())
-        .tipoControle(Boolean.FALSE)
-        .build();
+                .id(dto.getId())
+                .status(dto.getStatus())
+                .tipoControle(Boolean.FALSE)
+                .umidadeMaxima(dto.getUmidadeMaxima())
+                .umidadeMinima(dto.getUmidadeMinima())
+                .build();
     }
 
     @Override
@@ -36,5 +40,5 @@ public class SetupConverter implements Converter<Setup, SetupDto> {
         entityList.forEach(entity -> setupDtoList.add(toDto(entity)));
         return setupDtoList;
     }
-    
+
 }

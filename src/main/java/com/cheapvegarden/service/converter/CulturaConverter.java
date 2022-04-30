@@ -11,14 +11,10 @@ import com.cheapvegarden.repository.dto.CulturaDto;
 import com.cheapvegarden.repository.entity.Controle;
 import com.cheapvegarden.repository.entity.Cultura;
 import com.cheapvegarden.repository.entity.Setup;
-import com.cheapvegarden.service.ControleService;
 import com.cheapvegarden.service.SetupService;
 
 @ApplicationScoped
 public class CulturaConverter implements Converter<Cultura, CulturaDto> {
-
-    @Inject
-    ControleService controleService;
 
     @Inject
     SetupService setupService;
@@ -26,21 +22,21 @@ public class CulturaConverter implements Converter<Cultura, CulturaDto> {
     @Override
     public CulturaDto toDto(Cultura entity) throws Exception {
         return CulturaDto.builder()
-        .id(entity.getId())
-        .nome(entity.getNome())
-        .controleDto(controleService.buscarControlePorId(entity.getControle().getId()))
-        .setupDto(setupService.buscarSetupPorId(entity.getSetup().getId()))
-        .build();
+                .id(entity.getId())
+                .nome(entity.getNome())
+                .controleId(entity.getControle().getId())
+                .setupDto(setupService.buscarSetupPorId(entity.getSetup().getId()))
+                .build();
     }
 
     @Override
     public Cultura toEntity(CulturaDto dto) throws IllegalAccessException {
         return Cultura.builder()
-        .id(dto.getId())
-        .nome(dto.getNome())
-        .controle(Controle.builder().id(dto.getControleDto().getId()).build())
-        .setup(Setup.builder().id(dto.getSetupDto().getId()).build())
-        .build();
+                .id(dto.getId())
+                .nome(dto.getNome())
+                .controle(Controle.builder().id(dto.getControleId()).build())
+                .setup(Setup.builder().id(dto.getSetupDto().getId()).build())
+                .build();
     }
 
     @Override
@@ -54,5 +50,5 @@ public class CulturaConverter implements Converter<Cultura, CulturaDto> {
             }
         });
         return culturaDtoList;
-    }    
+    }
 }

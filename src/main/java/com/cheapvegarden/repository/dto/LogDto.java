@@ -13,9 +13,6 @@ import lombok.*;
 @NoArgsConstructor
 public class LogDto {
     
-    @NotNull
-    private Boolean statusSolenoide;
-
     private LocalTime hora;
 
     @NotNull
@@ -27,11 +24,11 @@ public class LogDto {
 
     @NotNull
     @PositiveOrZero
-    @DecimalMax("99.99")
+    @DecimalMax("100.00")
     private BigDecimal umidadeClima;
 
     @NotNull
     @PositiveOrZero
-    @DecimalMax("99.99")
+    @DecimalMax("100.00")
     private BigDecimal umidadeSolo;
 }

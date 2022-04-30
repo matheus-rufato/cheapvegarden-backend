@@ -1,5 +1,7 @@
 package com.cheapvegarden.repository.dto;
 
+import java.math.BigDecimal;
+
 import javax.validation.constraints.*;
 
 import lombok.*;
@@ -13,14 +15,11 @@ public class ControleDto {
     private Long id;
 
     @NotNull
-    @Positive
-    @Max(99)
-    @Min(1)
-    private Integer umidadeMaxima;
+    private Boolean statusSolenoide;
 
-    @NotNull
-    @Positive
-    @Max(99)
-    @Min(1)
-    private Integer umidadeMinima;
+    private BigDecimal temperaturaClima;
+
+    private BigDecimal umidadeClima;
+
+    private BigDecimal umidadeSolo;
 }

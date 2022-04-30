@@ -9,10 +9,10 @@ import javax.ws.rs.core.*;
 import com.cheapvegarden.repository.dto.AgendamentoDto;
 import com.cheapvegarden.service.AgendamentoService;
 
-@Path("/scheduling")
+@Path("/agendamento")
 @ApplicationScoped
 public class AgendamentoResource {
-    
+
     @Inject
     AgendamentoService service;
 
@@ -27,6 +27,13 @@ public class AgendamentoResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response readAll() throws Exception {
         return Response.ok(service.listarAgendamentos()).build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/listaAgendamento/{culturaId}")
+    public Response readShedulingByCultureId(@PathParam("culturaId") Long culturaId) throws Exception {
+        return Response.ok(service.listarAgendamentosPorCultura(culturaId)).build();
     }
 
     @DELETE

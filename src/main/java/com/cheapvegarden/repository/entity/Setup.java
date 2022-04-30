@@ -25,4 +25,15 @@ public class Setup {
     @NotNull
     private Boolean tipoControle;
 
+    @Column(name = "Umidade_maxima")
+    @NotNull
+    @Positive
+    @Max(100)
+    private Integer umidadeMaxima;
+
+    @Column(name = "Umidade_minima")
+    @NotNull
+    @Positive
+    @Max(100)
+    private Integer umidadeMinima;
 }
