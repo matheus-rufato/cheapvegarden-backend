@@ -12,23 +12,25 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LogDto {
-    
+
     private LocalTime hora;
 
-    @NotNull
     @PositiveOrZero
+    @Digits(integer = 3, fraction = 2)
+    @NotNull
     private BigDecimal fluxo;
 
+    @Digits(integer = 3, fraction = 2)
     @NotNull
     private BigDecimal temperaturaClima;
 
-    @NotNull
     @PositiveOrZero
-    @DecimalMax("100.00")
+    @Digits(integer = 3, fraction = 2)
+    @NotNull
     private BigDecimal umidadeClima;
 
-    @NotNull
     @PositiveOrZero
-    @DecimalMax("100.00")
+    @Digits(integer = 3, fraction = 2)
+    @NotNull
     private BigDecimal umidadeSolo;
 }

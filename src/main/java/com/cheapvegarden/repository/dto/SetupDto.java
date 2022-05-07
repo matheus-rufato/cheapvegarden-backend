@@ -1,6 +1,6 @@
 package com.cheapvegarden.repository.dto;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 import lombok.*;
 
@@ -10,14 +10,21 @@ import lombok.*;
 @NoArgsConstructor
 public class SetupDto {
 
-    private Long id;
+    private long id;
 
     @NotNull
-    private Boolean status;
+    private boolean status;
 
-    private Boolean tipoControle;
+    @NotNull
+    private boolean tipoControle;
 
-    private Integer umidadeMaxima;
+    @Positive
+    @Max(100)
+    @NotNull
+    private int umidadeMaxima;
 
-    private Integer umidadeMinima;
+    @Positive
+    @Max(100)
+    @NotNull
+    private int umidadeMinima;
 }

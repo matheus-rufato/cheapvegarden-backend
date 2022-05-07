@@ -27,9 +27,10 @@ public class SetupResource {
 
     @PUT
     @Transactional
+    @TransactionConfiguration(timeout = 900)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    public Response alterar(@PathParam("id") Long id, @Valid SetupDto setupDto) throws Exception {
+    public Response alterar(@PathParam("id") long id, @Valid SetupDto setupDto) throws Exception {
         return Response.ok(service.alterar(id, setupDto)).build();
     }
 
@@ -45,7 +46,13 @@ public class SetupResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    public Response lerSetupPorId(@PathParam("id") Long id) throws Exception {
+    public Response lerSetupPorId(@PathParam("id") long id) throws Exception {
         return Response.ok(service.buscarSetupPorId(id)).build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response buscarSetupAtivo() throws Exception {
+        return Response.ok(service.buscarSetupAtivo()).build();
     }
 }

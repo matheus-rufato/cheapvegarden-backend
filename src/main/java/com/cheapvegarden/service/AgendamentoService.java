@@ -1,7 +1,6 @@
 package com.cheapvegarden.service;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -13,6 +12,7 @@ import com.cheapvegarden.repository.dto.AgendamentoDto;
 import com.cheapvegarden.repository.entity.Agendamento;
 import com.cheapvegarden.service.converter.AgendamentoConverter;
 import com.cheapvegarden.service.validator.AgendamentoValidacao;
+import com.cheapvegarden.service.validator.CulturaValidacao;
 
 @ApplicationScoped
 public class AgendamentoService {
@@ -26,12 +26,22 @@ public class AgendamentoService {
     @Inject
     AgendamentoValidacao validacao;
 
+    @Inject
+    CulturaValidacao culturaValidacao;
+
     public AgendamentoDto salvar(AgendamentoDto agendamentoDto) throws Exception {
         try {
-            Agendamento agendamento = converter.toEntity(agendamentoDto);
-            LocalTime horaInicio = agendamento.getHoraInicio();
-            LocalTime horaFim = agendamento.getHoraFim();
+            LocalTime horaInicio = agendamentoDto.getHoraInicio();
+            LocalTime horaFim = agendamentoDto.getHoraFim();
+            List<AgendamentoDto> agendamentos = listarAgendamentosPorCultura(agendamentoDto.getCulturaId());
+
             validacao.validarHoraFimDoAgendamento(horaInicio, horaFim);
+
+            if (!agendamentos.isEmpty()) {
+                validacao.validarIntervaloEntreAgendamento(horaInicio, horaFim, agendamentos);
+            }
+
+            Agendamento agendamento = converter.toEntity(agendamentoDto);
             dao.persistAndFlush(agendamento);
             return converter.toDto(agendamento);
         } catch (Exception e) {
@@ -39,19 +49,10 @@ public class AgendamentoService {
         }
     }
 
-    public List<AgendamentoDto> listarAgendamentos() throws Exception {
+    public List<AgendamentoDto> listarAgendamentosPorCultura(long culturaId) throws Exception {
         try {
-            List<AgendamentoDto> agendamentoDtoList = new ArrayList<>();
-            List<Agendamento> agendamentos = dao.listAll();
-            agendamentoDtoList = converter.toDtoList(agendamentos);
-            return agendamentoDtoList;
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        }
-    }
+            culturaValidacao.validarSeIdDaCulturaExiste(culturaId);
 
-    public List<AgendamentoDto> listarAgendamentosPorCultura(Long culturaId) throws Exception {
-        try {
             List<Agendamento> agendamentoListados = dao.buscarAgendamentosPorCulturaId(culturaId);
             List<AgendamentoDto> agendamentoDtoList = converter.toDtoList(agendamentoListados);
             return agendamentoDtoList;
@@ -60,7 +61,7 @@ public class AgendamentoService {
         }
     }
 
-    public AgendamentoDto deletarAgendamento(Long id) throws Exception {
+    public AgendamentoDto deletarAgendamento(long id) throws Exception {
         try {
             Agendamento agendamento = dao.findById(id);
             dao.delete(agendamento);
@@ -71,7 +72,7 @@ public class AgendamentoService {
     }
 
     @TransactionScoped
-    public void deletar(Long culturaId) throws Exception {
+    public void deletarAgendamentosPorCultura(long culturaId) throws Exception {
         try {
             dao.deletarAgendamentosDeUmaCultura(culturaId);
         } catch (Exception e) {

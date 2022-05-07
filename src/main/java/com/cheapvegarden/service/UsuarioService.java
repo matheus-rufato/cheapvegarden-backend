@@ -12,7 +12,7 @@ import com.cheapvegarden.service.converter.UsuarioConverter;
 
 @ApplicationScoped
 public class UsuarioService {
-    
+
     @Inject
     UsuarioDao dao;
 
@@ -35,7 +35,7 @@ public class UsuarioService {
             List<UsuarioDto> usuarioDtoList = new ArrayList<>();
             List<Usuario> usuarios = dao.listAll();
             usuarioDtoList = converter.toDtoList(usuarios);
-            return usuarioDtoList;            
+            return usuarioDtoList;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -52,7 +52,7 @@ public class UsuarioService {
         }
     }
 
-    public UsuarioDto buscarUsuarioPorId(Long id) throws Exception {
+    public UsuarioDto buscarUsuarioPorId(long id) throws Exception {
         try {
             Usuario usuario = dao.findById(id);
             UsuarioDto usuarioDto = converter.toDto(usuario);

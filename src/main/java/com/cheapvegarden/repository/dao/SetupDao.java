@@ -19,21 +19,23 @@ public class SetupDao implements PanacheRepositoryBase<Setup, Long> {
     public Setup buscarSetupAtivo() throws Exception {
         try {
             return entityManager
-                    .createQuery("SELECT setup FROM Setup AS setup WHERE Status = :status", Setup.class)
-                    .setParameter("status", Boolean.TRUE)
+                    .createQuery(
+                            "SELECT setup FROM Setup AS setup WHERE Status = :status",
+                            Setup.class)
+                    .setParameter("status", true)
                     .getSingleResult();
         } catch (Exception e) {
             throw new Exception(e.getMessage(), e.getCause());
         }
     }
 
-    public Boolean buscarTipoControle() throws Exception {
+    public boolean buscarTipoControle() throws Exception {
         try {
             return entityManager
                     .createQuery(
                             "SELECT tipoControle FROM Setup WHERE Status = :status",
                             Boolean.class)
-                    .setParameter("status", Boolean.TRUE)
+                    .setParameter("status", true)
                     .getSingleResult();
         } catch (Exception e) {
             throw new Exception(e.getMessage(), e.getCause());
@@ -54,12 +56,12 @@ public class SetupDao implements PanacheRepositoryBase<Setup, Long> {
         }
     }
 
-    public void alterarStatusDeSetupSemLigacao(Boolean status) throws SQLException {
+    public void alterarStatusDeSetupSemLigacao(boolean status) throws SQLException {
         try {
             entityManager.createQuery(
-                    "UPDATE Setup AS setup SET setup.status = :status WHERE setup.id = :id")
+                    "UPDATE Setup AS setup SET Status = :status WHERE id = :id")
                     .setParameter("status", status)
-                    .setParameter("id", Long.valueOf(1))
+                    .setParameter("id", 1l)
                     .executeUpdate();
         } catch (Exception e) {
             throw new SQLException(e.getMessage(), e.getCause());

@@ -16,8 +16,8 @@ public class SetupConverter implements Converter<Setup, SetupDto> {
     public SetupDto toDto(Setup entity) {
         return SetupDto.builder()
                 .id(entity.getId())
-                .status(entity.getStatus())
-                .tipoControle(entity.getTipoControle())
+                .status(entity.isStatus())
+                .tipoControle(entity.isTipoControle())
                 .umidadeMaxima(entity.getUmidadeMaxima())
                 .umidadeMinima(entity.getUmidadeMinima())
                 .build();
@@ -27,8 +27,8 @@ public class SetupConverter implements Converter<Setup, SetupDto> {
     public Setup toEntity(SetupDto dto) throws IllegalAccessException {
         return Setup.builder()
                 .id(dto.getId())
-                .status(dto.getStatus())
-                .tipoControle(Boolean.FALSE)
+                .status(dto.isStatus())
+                .tipoControle(true)
                 .umidadeMaxima(dto.getUmidadeMaxima())
                 .umidadeMinima(dto.getUmidadeMinima())
                 .build();

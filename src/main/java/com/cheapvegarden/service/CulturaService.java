@@ -14,6 +14,7 @@ import com.cheapvegarden.repository.dto.SetupDto;
 import com.cheapvegarden.repository.entity.Cultura;
 import com.cheapvegarden.service.converter.CulturaConverter;
 import com.cheapvegarden.service.converter.CulturaLeituraConverter;
+import com.cheapvegarden.service.validator.SetupValidacao;
 
 @ApplicationScoped
 public class CulturaService {
@@ -36,6 +37,9 @@ public class CulturaService {
     @Inject
     AgendamentoService agendamentoService;
 
+    @Inject
+    SetupValidacao setupValidacao;
+
     @TransactionScoped
     public CulturaDto salvar(CulturaDto culturaDto) throws Exception {
         try {
@@ -53,16 +57,12 @@ public class CulturaService {
         }
     }
 
-    public CulturaLeituraDto alterarNomeCultura(Long id, String nome) throws Exception {
+    public CulturaLeituraDto alterarNomeCultura(long id, String nome) throws Exception {
         try {
             Cultura cultura = dao.findById(id);
-            CulturaLeituraDto culturaLeituraDto = culturaLeituraConverter.toDto(cultura);
-
-            culturaLeituraDto.setNome(nome);
-            cultura = culturaLeituraConverter.toEntity(culturaLeituraDto);
-
+            cultura.setNome(nome);
             dao.persistAndFlush(cultura);
-            return culturaLeituraDto;
+            return culturaLeituraConverter.toDto(cultura);
 
         } catch (Exception e) {
             throw new Exception(e.getMessage(), e.getCause());
@@ -80,6 +80,19 @@ public class CulturaService {
         }
     }
 
+    public CulturaLeituraDto buscarCulturaPorSetup(long setupId) throws Exception {
+        try {
+            setupValidacao.validarSeSetupIdExiste(setupId);
+            setupValidacao.validarSeIdEDiferenteDeUm(setupId);
+
+            Cultura cultura = dao.buscarCulturaPorSetup(setupId);
+            CulturaLeituraDto culturaDto = culturaLeituraConverter.toDto(cultura);
+            return culturaDto;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage(), e.getCause());
+        }
+    }
+
     public CulturaLeituraDto buscarCulturaAtiva() throws Exception {
         try {
             Cultura cultura = dao.buscarCulturaAtiva();
@@ -90,11 +103,11 @@ public class CulturaService {
         }
     }
 
-    public void deletarCultura(Long id) throws Exception {
+    public void deletarCultura(long id) throws Exception {
         try {
             Cultura cultura = dao.findById(id);
 
-            agendamentoService.deletar(cultura.getId());
+            agendamentoService.deletarAgendamentosPorCultura(cultura.getId());
             dao.delete(cultura);
             setupService.deletar(cultura.getSetup());
 

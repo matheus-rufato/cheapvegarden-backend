@@ -24,7 +24,21 @@ public class CulturaDao implements PanacheRepositoryBase<Cultura, Long> {
                                     "ON cultura.setup = s.id " +
                                     "WHERE s.status = :status",
                             Cultura.class)
-                    .setParameter("status", Boolean.TRUE)
+                    .setParameter("status", true)
+                    .getSingleResult();
+            return cultura;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage(), e.getCause());
+        }
+    }
+
+    public Cultura buscarCulturaPorSetup(long setupId) throws Exception {
+        try {
+            Cultura cultura = entityManager
+                    .createQuery(
+                            "SELECT cultura FROM Cultura AS cultura WHERE ID_setup = :setupId",
+                            Cultura.class)
+                    .setParameter("setupId", setupId)
                     .getSingleResult();
             return cultura;
         } catch (Exception e) {

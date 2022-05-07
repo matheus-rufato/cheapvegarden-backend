@@ -1,5 +1,7 @@
 package com.cheapvegarden.repository.dto;
 
+import javax.validation.constraints.*;
+
 import lombok.*;
 
 @Data
@@ -8,9 +10,15 @@ import lombok.*;
 @NoArgsConstructor
 public class SetupSemLigacaoDto {
 
-    private Long id;
+    private long id;
 
-    private Integer umidadeMaxima;
+    @Positive
+    @Max(100)
+    @NotNull
+    private int umidadeMaxima;
 
-    private Integer umidadeMinima;
+    @Positive
+    @Max(100)
+    @NotNull
+    private int umidadeMinima;
 }

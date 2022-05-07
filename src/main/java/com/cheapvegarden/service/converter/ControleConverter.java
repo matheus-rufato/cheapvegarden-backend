@@ -16,7 +16,7 @@ public class ControleConverter implements Converter<Controle, ControleDto> {
     public ControleDto toDto(Controle entity) {
         return ControleDto.builder()
                 .id(entity.getId())
-                .statusSolenoide(entity.getStatusSolenoide())
+                .statusSolenoide(entity.isStatusSolenoide())
                 .temperaturaClima(entity.getTemperaturaClima())
                 .umidadeClima(entity.getUmidadeClima())
                 .umidadeSolo(entity.getUmidadeSolo())
@@ -27,7 +27,7 @@ public class ControleConverter implements Converter<Controle, ControleDto> {
     public Controle toEntity(ControleDto dto) throws IllegalAccessException {
         return Controle.builder()
                 .id(dto.getId())
-                .statusSolenoide(dto.getStatusSolenoide())
+                .statusSolenoide(dto.isStatusSolenoide())
                 .temperaturaClima(dto.getTemperaturaClima())
                 .umidadeClima(dto.getUmidadeClima())
                 .umidadeSolo(dto.getUmidadeSolo())

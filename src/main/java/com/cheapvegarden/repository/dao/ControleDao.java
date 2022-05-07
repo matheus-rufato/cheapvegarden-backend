@@ -26,7 +26,7 @@ public class ControleDao implements PanacheRepositoryBase<Controle, Long> {
         }
     }
 
-    public Boolean buscarDesabilitarAgendamento() throws Exception {
+    public boolean buscarDesabilitarAgendamento() throws Exception {
         try {
             return entityManager
                     .createQuery(
@@ -38,12 +38,12 @@ public class ControleDao implements PanacheRepositoryBase<Controle, Long> {
         }
     }
 
-    public void alterarDesabilitarAgendamento(Boolean desabilitarAgendamento) throws Exception {
+    public void alterarDesabilitarAgendamento(boolean desabilitarAgendamento) throws Exception {
         try {
             entityManager.createQuery(
                     "UPDATE Controle AS controle SET controle.desabilitarAgendamento = :desabilitarAgendamento WHERE controle.id = :id")
                     .setParameter("desabilitarAgendamento", desabilitarAgendamento)
-                    .setParameter("id", Long.valueOf(1))
+                    .setParameter("id", 1l)
                     .executeUpdate();
         } catch (Exception e) {
             throw new Exception(e.getMessage(), e.getCause());

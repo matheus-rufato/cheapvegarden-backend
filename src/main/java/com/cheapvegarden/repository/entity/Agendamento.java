@@ -17,7 +17,7 @@ public class Agendamento {
     @Id
     @Column(name = "ID")
     @GeneratedValue(generator = "native", strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Id_cultura")

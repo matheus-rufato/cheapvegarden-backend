@@ -15,26 +15,26 @@ public class Usuario {
     @Id
     @Column(name = "ID")
     @GeneratedValue(generator = "native", strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(name = "Nome")
-    @NotNull
     @Size(max = 50)
+    @NotNull
     private String nome;
 
     @Column(name = "Telefone")
-    @NotNull
     @Size(max = 11)
+    @NotNull
     private String telefone;
 
     @Column(name = "Email")
-    @NotNull
     @Size(max = 50)
     @Email
+    @NotNull
     private String email;
 
     @Column(name = "Senha")
-    @NotNull
     @Size(max = 10, min = 8)
+    @NotNull
     private String senha;
 }

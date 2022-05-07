@@ -1,7 +1,6 @@
 package com.cheapvegarden.repository.dto;
 
-import javax.validation.constraints.Size;
-
+import javax.validation.constraints.*;
 
 import lombok.*;
 
@@ -11,12 +10,15 @@ import lombok.*;
 @NoArgsConstructor
 public class CulturaDto {
 
-    private Long id;
-    
+    private long id;
+
     @Size(max = 20)
+    @NotNull
     private String nome;
 
-    private Long controleId;
+    @NotNull
+    private long controleId;
 
+    @NotNull
     private SetupDto setupDto;
 }

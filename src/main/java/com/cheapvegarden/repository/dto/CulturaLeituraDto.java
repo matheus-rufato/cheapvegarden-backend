@@ -8,11 +8,11 @@ import lombok.*;
 @NoArgsConstructor
 public class CulturaLeituraDto {
 
-    private Long id;
+    private long id;
 
     private String nome;
 
-    private Long controleId;
+    private long controleId;
 
-    private Long setupId;
+    private long setupId;
 }

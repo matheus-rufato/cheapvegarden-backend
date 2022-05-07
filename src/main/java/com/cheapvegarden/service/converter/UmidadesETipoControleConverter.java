@@ -14,7 +14,7 @@ public class UmidadesETipoControleConverter implements Converter<Setup, Umidades
     @Override
     public UmidadesETipoControleDto toDto(Setup entity) throws Exception {
         return UmidadesETipoControleDto.builder()
-                .tipoControle(entity.getTipoControle())
+                .tipoControle(entity.isTipoControle())
                 .umidadeMaxima(entity.getUmidadeMaxima())
                 .umidadeMinima(entity.getUmidadeMinima())
                 .build();

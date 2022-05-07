@@ -11,7 +11,7 @@ import lombok.*;
 public class UsuarioDto {
 
     private Long id;
-    
+
     @Size(max = 50)
     @NotNull
     private String nome;
@@ -21,10 +21,11 @@ public class UsuarioDto {
     private String telefone;
 
     @Size(max = 50)
+    @Email
     @NotNull
     private String email;
 
-    @Size(max = 6, min = 6)
+    @Size(max = 10, min = 8)
     @NotNull
     private String senha;
 }

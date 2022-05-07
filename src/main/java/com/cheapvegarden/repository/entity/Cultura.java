@@ -15,18 +15,20 @@ public class Cultura {
     @Id
     @Column(name = "ID")
     @GeneratedValue(generator = "native", strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Id_controle")
+    @NotNull
     private Controle controle;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_setup")
+    @NotNull
     private Setup setup;
 
     @Column(name = "Nome")
-    @NotNull
     @Size(max = 20)
+    @NotNull
     private String nome;
 }

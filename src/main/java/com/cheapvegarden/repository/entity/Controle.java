@@ -18,33 +18,36 @@ public class Controle {
     @Id
     @Column(name = "ID")
     @GeneratedValue(generator = "native", strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @OneToMany(mappedBy = "controle")
     private List<Cultura> culturas;
 
     @Column(name = "Status_solenoide")
     @NotNull
-    private Boolean statusSolenoide;
+    private boolean statusSolenoide;
 
     @Column(name = "Temperatura_clima")
     @DecimalMax("100.00")
     @DecimalMin("-99.99")
     @Digits(integer = 3, fraction = 2)
+    @NotNull
     private BigDecimal temperaturaClima;
 
     @Column(name = "Umidade_clima")
     @DecimalMax("100.00")
     @PositiveOrZero
     @Digits(integer = 3, fraction = 2)
+    @NotNull
     private BigDecimal umidadeClima;
 
     @Column(name = "Umidade_solo")
     @DecimalMax("100.00")
     @PositiveOrZero
     @Digits(integer = 3, fraction = 2)
+    @NotNull
     private BigDecimal umidadeSolo;
 
     @Column(name = "Desabilitar_agendamento")
-    private Boolean desabilitarAgendamento;
+    private boolean desabilitarAgendamento;
 }

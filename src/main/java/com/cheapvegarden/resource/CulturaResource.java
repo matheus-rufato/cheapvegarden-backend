@@ -32,7 +32,7 @@ public class CulturaResource {
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    public Response alterarNome(@PathParam("id") Long id, @Valid String nome) throws Exception {
+    public Response alterarNome(@PathParam("id") long id, @Valid String nome) throws Exception {
         return Response.ok(service.alterarNomeCultura(id, nome)).build();
     }
 
@@ -44,16 +44,16 @@ public class CulturaResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/culturaAtiva")
-    public Response lerCulturaAtiva() throws Exception {
-        return Response.ok(service.buscarCulturaAtiva()).build();
+    @Path("/buscarCulturaPorSetup/{setupId}")
+    public Response buscarCulturaPorSetup(@PathParam("setupId") long setupId) throws Exception {
+        return Response.ok(service.buscarCulturaPorSetup(setupId)).build();
     }
 
     @DELETE
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    public Response deletar(@PathParam("id") Long id) throws Exception {
+    public Response deletar(@PathParam("id") long id) throws Exception {
         service.deletarCultura(id);
         return Response.status(Status.OK).build();
     }

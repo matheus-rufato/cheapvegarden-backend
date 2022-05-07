@@ -12,10 +12,10 @@ import com.cheapvegarden.service.UsuarioService;
 @Path("/user")
 @ApplicationScoped
 public class UsuarioResource {
-    
+
     @Inject
     UsuarioService service;
-    
+
     @POST
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
@@ -39,7 +39,7 @@ public class UsuarioResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/searchId/{id}")
-    public Response readUserById(@PathParam("id") Long id) throws Exception {
+    public Response readUserById(@PathParam("id") long id) throws Exception {
         return Response.ok(service.buscarUsuarioPorId(id)).build();
-    }    
+    }
 }

@@ -47,14 +47,14 @@ public class ControleService {
 
             if (Objects.nonNull(controle)) {
 
-                Boolean tipoDeControle = setupService.buscarTipoControle();
+                boolean tipoDeControle = setupService.buscarTipoControle();
 
                 if (Objects.nonNull(tipoDeControle)) {
-                    Boolean statusSolenoideRequisicao = controleDto.getStatusSolenoide();
-                    Boolean statusSolenoideLeitura = controle.getStatusSolenoide();
+                    boolean statusSolenoideRequisicao = controleDto.isStatusSolenoide();
+                    boolean statusSolenoideLeitura = controle.isStatusSolenoide();
 
                     if (!(statusSolenoideRequisicao) && statusSolenoideLeitura && !(tipoDeControle)) {
-                        controle.setDesabilitarAgendamento(Boolean.TRUE);
+                        controle.setDesabilitarAgendamento(true);
                     }
                 }
                 controle = atribuirValores(controle, controleDto);
@@ -69,9 +69,9 @@ public class ControleService {
         }
     }
 
-    public Boolean lerStatusSolenoide() throws Exception {
+    public boolean lerStatusSolenoide() throws Exception {
         try {
-            Boolean statusSolenoide = dao.buscarStatusSolenoide();
+            boolean statusSolenoide = dao.buscarStatusSolenoide();
             return statusSolenoide;
         } catch (Exception e) {
             throw new Exception(e.getMessage(), e.getCause());
@@ -106,12 +106,11 @@ public class ControleService {
                             && hora.isBefore(agendamento.getHoraFim()));
 
             if (iniciarIrrigacao && !(desabilitarAgendamento) && !(irrigacao)) {
-                alterarStatus(Boolean.TRUE);
+                alterarStatus(true);
             } else if (!(iniciarIrrigacao) && !(desabilitarAgendamento) && irrigacao) {
-                alterarStatus(Boolean.FALSE);
+                alterarStatus(false);
             } else if (!(iniciarIrrigacao) && desabilitarAgendamento) {
-                // alterarDesalibitarAgendamento(Boolean.FALSE);
-                dao.alterarDesabilitarAgendamento(Boolean.FALSE);
+                dao.alterarDesabilitarAgendamento(false);
             }
 
         } catch (Exception e) {
@@ -119,20 +118,8 @@ public class ControleService {
         }
     }
 
-    // private void alterarDesalibitarAgendamento(Boolean desabilitarAgendamento)
-    // throws Exception {
-    // try {
-    // // Controle controle = dao.findAll().singleResult();
-    // // controle.setDesabilitarAgendamento(desabilitarAgendamento);
-    // // dao.persistAndFlush(controle);
-    // dao.alterarDesabilitarAgendamento(desabilitarAgendamento);
-    // } catch (Exception e) {
-    // throw new Exception(e.getMessage(), e.getCause());
-    // }
-    // }
-
     @TransactionScoped
-    private void alterarStatus(Boolean statusSolenoide) throws Exception {
+    private void alterarStatus(boolean statusSolenoide) throws Exception {
         try {
             Controle controle = dao.findAll().singleResult();
             controle.setStatusSolenoide(statusSolenoide);
@@ -143,7 +130,7 @@ public class ControleService {
     }
 
     private Controle atribuirValores(Controle controle, ControleDto controleDto) {
-        controle.setStatusSolenoide(controleDto.getStatusSolenoide());
+        controle.setStatusSolenoide(controleDto.isStatusSolenoide());
         controle.setUmidadeSolo(controleDto.getUmidadeSolo());
         controle.setTemperaturaClima(controleDto.getTemperaturaClima());
         controle.setUmidadeClima(controleDto.getUmidadeClima());

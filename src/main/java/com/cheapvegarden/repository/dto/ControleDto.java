@@ -12,14 +12,26 @@ import lombok.*;
 @NoArgsConstructor
 public class ControleDto {
 
-    private Long id;
+    private long id;
 
     @NotNull
-    private Boolean statusSolenoide;
+    private boolean statusSolenoide;
 
+    @DecimalMax("100.00")
+    @DecimalMin("-99.99")
+    @Digits(integer = 3, fraction = 2)
+    @NotNull
     private BigDecimal temperaturaClima;
 
+    @DecimalMax("100.00")
+    @PositiveOrZero
+    @Digits(integer = 3, fraction = 2)
+    @NotNull
     private BigDecimal umidadeClima;
 
+    @DecimalMax("100.00")
+    @PositiveOrZero
+    @Digits(integer = 3, fraction = 2)
+    @NotNull
     private BigDecimal umidadeSolo;
 }

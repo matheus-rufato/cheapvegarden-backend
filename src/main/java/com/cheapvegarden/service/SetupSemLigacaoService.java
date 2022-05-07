@@ -7,6 +7,7 @@ import com.cheapvegarden.repository.dao.SetupDao;
 import com.cheapvegarden.repository.dto.SetupSemLigacaoDto;
 import com.cheapvegarden.repository.entity.Setup;
 import com.cheapvegarden.service.converter.SetupSemLigacaoConverter;
+import com.cheapvegarden.service.validator.SetupValidacao;
 
 @ApplicationScoped
 public class SetupSemLigacaoService {
@@ -17,16 +18,22 @@ public class SetupSemLigacaoService {
     @Inject
     SetupSemLigacaoConverter converter;
 
+    @Inject
+    SetupValidacao validacao;
+
     public SetupSemLigacaoDto alterarSetupSemLigacao(SetupSemLigacaoDto setupDto) throws Exception {
         try {
-            Setup setup = dao.buscarSetupSemLigacao();
+            int umidadeMaxima = setupDto.getUmidadeMaxima();
+            int umidadeMinima = setupDto.getUmidadeMinima();
 
+            validacao.validarSeUmidadeMaximaEMaiorQueUmidadeMinima(umidadeMaxima, umidadeMinima);
+
+            Setup setup = dao.buscarSetupSemLigacao();
             SetupSemLigacaoDto setupListado = converter.toDto(setup);
 
             setupListado = atribuirValores(setupDto, setupListado);
 
             setup = converter.toEntity(setupListado);
-
             dao.persistAndFlush(setup);
 
             return setupListado;
@@ -46,7 +53,7 @@ public class SetupSemLigacaoService {
     }
 
     public void salvarPrimeiroSetup() throws IllegalAccessException {
-        SetupSemLigacaoDto setupDto = new SetupSemLigacaoDto(null, 60, 45);
+        SetupSemLigacaoDto setupDto = new SetupSemLigacaoDto(1, 60, 45);
         Setup setup = converter.toEntity(setupDto);
         dao.persistAndFlush(setup);
     }
