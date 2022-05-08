@@ -18,19 +18,23 @@ public class UsuarioConverter implements Converter<Usuario, UsuarioDto> {
                 .id(entity.getId())
                 .nome(entity.getNome())
                 .telefone(entity.getTelefone())
+                .username(entity.getUsername())
                 .email(entity.getEmail())
                 .senha(entity.getSenha())
+                .tipo(entity.getTipo())
                 .build();
     }
 
     @Override
     public Usuario toEntity(UsuarioDto dto) throws IllegalAccessException {
         return Usuario.builder()
-                .id(dto.getId())
+                .id(1l)
                 .nome(dto.getNome())
                 .telefone(dto.getTelefone())
+                .username(dto.getUsername())
                 .email(dto.getEmail())
                 .senha(dto.getSenha())
+                .tipo("admin")
                 .build();
     }
 

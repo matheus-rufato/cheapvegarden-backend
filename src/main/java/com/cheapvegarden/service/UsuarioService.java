@@ -10,6 +10,8 @@ import com.cheapvegarden.repository.dto.UsuarioDto;
 import com.cheapvegarden.repository.entity.Usuario;
 import com.cheapvegarden.service.converter.UsuarioConverter;
 
+import io.quarkus.elytron.security.common.BcryptUtil;
+
 @ApplicationScoped
 public class UsuarioService {
 
@@ -23,6 +25,8 @@ public class UsuarioService {
 
         try {
             Usuario usuario = converter.toEntity(usuarioDto);
+            String senhaCriptografada = BcryptUtil.bcryptHash(usuario.getSenha());
+            usuario.setSenha(senhaCriptografada);
             dao.persistAndFlush(usuario);
             return converter.toDto(usuario);
         } catch (Exception e) {

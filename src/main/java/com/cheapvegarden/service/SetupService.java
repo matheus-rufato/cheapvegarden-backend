@@ -92,7 +92,9 @@ public class SetupService {
             UmidadesETipoControleDto umidadesETipoControleDto = new UmidadesETipoControleDto();
             umidadesETipoControleDto = umidadesETipoControleConverter.toDto(dao.buscarSetupAtivo());
 
-            if (!umidadesETipoControleDto.isTipoControle()) {
+            boolean desabilitarAgendamento = controleService.buscarDesabilitarAgendamento();
+
+            if (!umidadesETipoControleDto.isTipoControle() || desabilitarAgendamento) {
                 controleService
                         .controlarIrrigacaoPorAgendamento(
                                 LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))));

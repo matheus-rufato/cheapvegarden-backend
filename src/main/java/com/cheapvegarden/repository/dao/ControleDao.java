@@ -18,7 +18,7 @@ public class ControleDao implements PanacheRepositoryBase<Controle, Long> {
         try {
             return entityManager
                     .createQuery(
-                            "SELECT controle.statusSolenoide FROM Controle AS controle",
+                            "SELECT Controle.statusSolenoide FROM controle AS Controle",
                             Boolean.class)
                     .getSingleResult();
         } catch (Exception e) {
@@ -30,7 +30,7 @@ public class ControleDao implements PanacheRepositoryBase<Controle, Long> {
         try {
             return entityManager
                     .createQuery(
-                            "SELECT desabilitarAgendamento FROM Controle",
+                            "SELECT desabilitarAgendamento FROM controle",
                             Boolean.class)
                     .getSingleResult();
         } catch (Exception e) {
@@ -40,8 +40,11 @@ public class ControleDao implements PanacheRepositoryBase<Controle, Long> {
 
     public void alterarDesabilitarAgendamento(boolean desabilitarAgendamento) throws Exception {
         try {
-            entityManager.createQuery(
-                    "UPDATE Controle AS controle SET controle.desabilitarAgendamento = :desabilitarAgendamento WHERE controle.id = :id")
+            entityManager
+                    .createQuery(
+                            "UPDATE controle AS Controle " +
+                                    "SET Controle.desabilitarAgendamento = :desabilitarAgendamento " +
+                                    "WHERE Controle.id = :id")
                     .setParameter("desabilitarAgendamento", desabilitarAgendamento)
                     .setParameter("id", 1l)
                     .executeUpdate();

@@ -2,6 +2,7 @@ package com.cheapvegarden.service;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import com.cheapvegarden.repository.dao.SetupDao;
 import com.cheapvegarden.repository.dto.SetupSemLigacaoDto;
@@ -21,6 +22,7 @@ public class SetupSemLigacaoService {
     @Inject
     SetupValidacao validacao;
 
+    @Transactional
     public SetupSemLigacaoDto alterarSetupSemLigacao(SetupSemLigacaoDto setupDto) throws Exception {
         try {
             int umidadeMaxima = setupDto.getUmidadeMaxima();
@@ -29,14 +31,13 @@ public class SetupSemLigacaoService {
             validacao.validarSeUmidadeMaximaEMaiorQueUmidadeMinima(umidadeMaxima, umidadeMinima);
 
             Setup setup = dao.buscarSetupSemLigacao();
-            SetupSemLigacaoDto setupListado = converter.toDto(setup);
+            setup.setUmidadeMaxima(umidadeMaxima);
+            setup.setUmidadeMinima(umidadeMinima);
 
-            setupListado = atribuirValores(setupDto, setupListado);
-
-            setup = converter.toEntity(setupListado);
             dao.persistAndFlush(setup);
 
-            return setupListado;
+            SetupSemLigacaoDto setupSemLigacaoDto = converter.toDto(setup);
+            return setupSemLigacaoDto;
         } catch (Exception e) {
             throw new Exception(e.getMessage(), e.getCause());
         }
@@ -52,18 +53,13 @@ public class SetupSemLigacaoService {
         }
     }
 
-    public void salvarPrimeiroSetup() throws IllegalAccessException {
-        SetupSemLigacaoDto setupDto = new SetupSemLigacaoDto(1, 60, 45);
-        Setup setup = converter.toEntity(setupDto);
-        dao.persistAndFlush(setup);
-    }
-
-    private SetupSemLigacaoDto atribuirValores(SetupSemLigacaoDto setupDto, SetupSemLigacaoDto setupListado)
-            throws Exception {
+    public void salvarPrimeiroSetup() throws Exception {
         try {
-            setupListado.setUmidadeMaxima(setupDto.getUmidadeMaxima());
-            setupListado.setUmidadeMinima(setupDto.getUmidadeMinima());
-            return setupListado;
+            SetupSemLigacaoDto setupDto = new SetupSemLigacaoDto();
+            setupDto.setUmidadeMaxima(60);
+            setupDto.setUmidadeMinima(50);
+            Setup setup = converter.toEntity(setupDto);
+            dao.persistAndFlush(setup);
         } catch (Exception e) {
             throw new Exception(e.getMessage(), e.getCause());
         }

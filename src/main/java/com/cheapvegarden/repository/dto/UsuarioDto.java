@@ -20,6 +20,10 @@ public class UsuarioDto {
     @NotNull
     private String telefone;
 
+    @Size(max = 20)
+    @NotNull
+    private String username;
+
     @Size(max = 50)
     @Email
     @NotNull
@@ -28,4 +32,7 @@ public class UsuarioDto {
     @Size(max = 10, min = 8)
     @NotNull
     private String senha;
+
+    @NotNull
+    private String tipo;
 }

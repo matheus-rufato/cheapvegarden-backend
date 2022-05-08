@@ -1,5 +1,6 @@
 package com.cheapvegarden.resource;
 
+import javax.annotation.security.PermitAll;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -27,6 +28,7 @@ public class ControleResource {
     }
 
     @GET
+    @PermitAll
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/lerStatusSolenoide")
     public Response lerStatusSolenoide() throws Exception {

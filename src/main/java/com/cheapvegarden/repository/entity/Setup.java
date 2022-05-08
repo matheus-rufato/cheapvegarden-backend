@@ -9,29 +9,29 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "Setup")
+@Entity(name = "setup")
 public class Setup {
 
     @Id
-    @JoinColumn(name = "ID")
+    @JoinColumn(name = "id")
     @GeneratedValue(generator = "native", strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "Status")
+    @Column(name = "status")
     @NotNull
     private boolean status;
 
-    @Column(name = "Tipo_controle")
+    @Column(name = "tipo_controle")
     @NotNull
     private boolean tipoControle;
 
-    @Column(name = "Umidade_maxima")
+    @Column(name = "umidade_maxima")
     @Positive
     @Max(100)
     @NotNull
     private int umidadeMaxima;
 
-    @Column(name = "Umidade_minima")
+    @Column(name = "umidade_minima")
     @Positive
     @Max(100)
     @NotNull

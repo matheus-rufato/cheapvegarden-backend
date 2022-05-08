@@ -1,5 +1,7 @@
 package com.cheapvegarden.resource;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -19,7 +21,7 @@ public class UsuarioResource {
     @POST
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(UsuarioDto usuarioDto) throws Exception {
+    public Response criar(UsuarioDto usuarioDto) throws Exception {
         return Response.ok(service.salvar(usuarioDto)).build();
     }
 

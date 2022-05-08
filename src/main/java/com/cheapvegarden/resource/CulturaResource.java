@@ -44,7 +44,7 @@ public class CulturaResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/buscarCulturaPorSetup/{setupId}")
+    @Path("/buscarPorSetup/{setupId}")
     public Response buscarCulturaPorSetup(@PathParam("setupId") long setupId) throws Exception {
         return Response.ok(service.buscarCulturaPorSetup(setupId)).build();
     }

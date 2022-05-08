@@ -21,7 +21,7 @@ public class AgendamentoDao implements PanacheRepositoryBase<Agendamento, Long> 
         try {
             return entityManager
                     .createQuery(
-                            "SELECT agendamento FROM Agendamento AS agendamento WHERE Id_cultura = :culturaId ORDER BY Hora_inicio",
+                            "SELECT Agendamento FROM agendamento AS Agendamento WHERE id_cultura = :culturaId ORDER BY hora_inicio",
                             Agendamento.class)
                     .setParameter("culturaId", culturaId)
                     .getResultList();
@@ -33,7 +33,7 @@ public class AgendamentoDao implements PanacheRepositoryBase<Agendamento, Long> 
     public void deletarAgendamentosDeUmaCultura(long culturaId) throws SQLException {
         try {
             entityManager.createQuery(
-                    "DELETE FROM Agendamento AS agendamento WHERE agendamento.cultura.id = :culturaId")
+                    "DELETE FROM agendamento WHERE agendamento.cultura.id = :culturaId")
                     .setParameter("culturaId", culturaId)
                     .executeUpdate();
         } catch (Exception e) {

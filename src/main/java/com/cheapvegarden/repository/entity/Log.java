@@ -12,36 +12,36 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "Log")
+@Entity(name = "log")
 public class Log {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "id")
     @GeneratedValue(generator = "native", strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "Hora")
+    @Column(name = "hora")
     @NotNull
     private LocalTime hora;
 
-    @Column(name = "Fluxo")
+    @Column(name = "fluxo")
     @PositiveOrZero
     @Digits(integer = 3, fraction = 2)
     @NotNull
     private BigDecimal fluxo;
 
-    @Column(name = "Temperatura_clima")
+    @Column(name = "temperatura_clima")
     @Digits(integer = 3, fraction = 2)
     @NotNull
     private BigDecimal temperaturaClima;
 
-    @Column(name = "Umidade_clima")
+    @Column(name = "umidade_clima")
     @PositiveOrZero
     @Digits(integer = 3, fraction = 2)
     @NotNull
     private BigDecimal umidadeClima;
 
-    @Column(name = "Umidade_solo")
+    @Column(name = "umidade_solo")
     @PositiveOrZero
     @Digits(integer = 3, fraction = 2)
     @NotNull

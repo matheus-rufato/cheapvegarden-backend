@@ -11,24 +11,24 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "Agendamento")
+@Entity(name = "agendamento")
 public class Agendamento {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "id")
     @GeneratedValue(generator = "native", strategy = GenerationType.IDENTITY)
     private long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Id_cultura")
+    @JoinColumn(name = "id_cultura")
     @NotNull
     private Cultura cultura;
 
-    @Column(name = "Hora_inicio")
+    @Column(name = "hora_inicio")
     @NotNull
     private LocalTime horaInicio;
 
-    @Column(name = "Hora_fim")
+    @Column(name = "hora_fim")
     @NotNull
     private LocalTime horaFim;
 }

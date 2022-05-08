@@ -18,16 +18,17 @@ public class CulturaDao implements PanacheRepositoryBase<Cultura, Long> {
         try {
             Cultura cultura = entityManager
                     .createQuery(
-                            "SELECT cultura " +
-                                    "FROM Cultura AS cultura " +
-                                    "INNER JOIN Setup s " +
-                                    "ON cultura.setup = s.id " +
+                            "SELECT Cultura " +
+                                    "FROM cultura AS Cultura " +
+                                    "INNER JOIN setup AS s " +
+                                    "ON Cultura.setup = s.id " +
                                     "WHERE s.status = :status",
                             Cultura.class)
                     .setParameter("status", true)
                     .getSingleResult();
             return cultura;
         } catch (Exception e) {
+
             throw new Exception(e.getMessage(), e.getCause());
         }
     }
@@ -36,7 +37,7 @@ public class CulturaDao implements PanacheRepositoryBase<Cultura, Long> {
         try {
             Cultura cultura = entityManager
                     .createQuery(
-                            "SELECT cultura FROM Cultura AS cultura WHERE ID_setup = :setupId",
+                            "SELECT Cultura FROM cultura AS Cultura WHERE id_setup = :setupId",
                             Cultura.class)
                     .setParameter("setupId", setupId)
                     .getSingleResult();

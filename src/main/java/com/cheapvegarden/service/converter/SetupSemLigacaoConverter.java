@@ -33,7 +33,6 @@ public class SetupSemLigacaoConverter implements Converter<Setup, SetupSemLigaca
 
     @Override
     public List<SetupSemLigacaoDto> toDtoList(List<Setup> entityList) throws Exception {
-        // TODO Auto-generated method stub
         return null;
     }
 

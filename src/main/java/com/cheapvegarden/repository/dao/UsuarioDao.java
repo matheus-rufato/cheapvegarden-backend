@@ -20,7 +20,7 @@ public class UsuarioDao implements PanacheRepositoryBase<Usuario, Long> {
         try {
             return entityManager
                     .createQuery(
-                            "SELECT usuario FROM Usuario AS usuario WHERE Nome = :nome",
+                            "SELECT usuario FROM usuario WHERE nome = :nome",
                             Usuario.class)
                     .setParameter("nome", nome)
                     .getResultList();

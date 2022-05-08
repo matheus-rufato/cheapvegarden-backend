@@ -118,6 +118,15 @@ public class ControleService {
         }
     }
 
+    public boolean buscarDesabilitarAgendamento() {
+        try {
+            boolean desabilitarAgendamento = dao.buscarDesabilitarAgendamento();
+            return desabilitarAgendamento;
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e.getCause());
+        }
+    }
+
     @TransactionScoped
     private void alterarStatus(boolean statusSolenoide) throws Exception {
         try {

@@ -20,7 +20,7 @@ public class SetupDao implements PanacheRepositoryBase<Setup, Long> {
         try {
             return entityManager
                     .createQuery(
-                            "SELECT setup FROM Setup AS setup WHERE Status = :status",
+                            "SELECT Setup FROM setup AS Setup WHERE status = :status",
                             Setup.class)
                     .setParameter("status", true)
                     .getSingleResult();
@@ -33,7 +33,7 @@ public class SetupDao implements PanacheRepositoryBase<Setup, Long> {
         try {
             return entityManager
                     .createQuery(
-                            "SELECT tipoControle FROM Setup WHERE Status = :status",
+                            "SELECT tipoControle FROM setup WHERE status = :status",
                             Boolean.class)
                     .setParameter("status", true)
                     .getSingleResult();
@@ -45,10 +45,10 @@ public class SetupDao implements PanacheRepositoryBase<Setup, Long> {
     public Setup buscarSetupSemLigacao() throws Exception {
         try {
             return entityManager
-                    .createQuery("SELECT setup " +
-                            "FROM Setup AS setup " +
+                    .createQuery("SELECT Setup " +
+                            "FROM setup AS Setup " +
                             "WHERE id " +
-                            "NOT IN (SELECT cultura.setup FROM Cultura AS cultura)",
+                            "NOT IN (SELECT Cultura.setup FROM cultura AS Cultura)",
                             Setup.class)
                     .getSingleResult();
         } catch (Exception e) {
@@ -59,7 +59,7 @@ public class SetupDao implements PanacheRepositoryBase<Setup, Long> {
     public void alterarStatusDeSetupSemLigacao(boolean status) throws SQLException {
         try {
             entityManager.createQuery(
-                    "UPDATE Setup AS setup SET Status = :status WHERE id = :id")
+                    "UPDATE setup SET status = :status WHERE id = :id")
                     .setParameter("status", status)
                     .setParameter("id", 1l)
                     .executeUpdate();

@@ -22,13 +22,11 @@ public class UmidadesETipoControleConverter implements Converter<Setup, Umidades
 
     @Override
     public Setup toEntity(UmidadesETipoControleDto dto) throws IllegalAccessException {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public List<UmidadesETipoControleDto> toDtoList(List<Setup> entityList) throws Exception {
-        // TODO Auto-generated method stub
         return null;
     }
 }

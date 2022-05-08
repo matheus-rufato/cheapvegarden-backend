@@ -9,25 +9,25 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "Cultura")
+@Entity(name = "cultura")
 public class Cultura {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "id")
     @GeneratedValue(generator = "native", strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Id_controle")
+    @JoinColumn(name = "id_controle")
     @NotNull
     private Controle controle;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_setup")
+    @JoinColumn(name = "id_setup")
     @NotNull
     private Setup setup;
 
-    @Column(name = "Nome")
+    @Column(name = "nome")
     @Size(max = 20)
     @NotNull
     private String nome;
