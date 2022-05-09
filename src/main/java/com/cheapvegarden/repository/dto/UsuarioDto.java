@@ -10,21 +10,17 @@ import lombok.*;
 @NoArgsConstructor
 public class UsuarioDto {
 
-    private Long id;
+    private long id;
 
-    @Size(max = 50)
+    @Size(max = 100)
     @NotNull
     private String nome;
 
-    @Size(max = 11)
+    @Size(max = 15, min = 11)
     @NotNull
     private String telefone;
 
-    @Size(max = 20)
-    @NotNull
-    private String username;
-
-    @Size(max = 50)
+    @Size(max = 100)
     @Email
     @NotNull
     private String email;
@@ -33,6 +29,7 @@ public class UsuarioDto {
     @NotNull
     private String senha;
 
+    @Size(max = 5, min = 4)
     @NotNull
     private String tipo;
 }

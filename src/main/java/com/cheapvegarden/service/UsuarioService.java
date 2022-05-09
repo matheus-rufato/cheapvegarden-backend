@@ -4,6 +4,7 @@ import java.util.*;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.TransactionScoped;
 
 import com.cheapvegarden.repository.dao.UsuarioDao;
 import com.cheapvegarden.repository.dto.UsuarioDto;
@@ -21,10 +22,12 @@ public class UsuarioService {
     @Inject
     UsuarioConverter converter;
 
+    @TransactionScoped
     public UsuarioDto salvar(UsuarioDto usuarioDto) throws Exception {
 
         try {
-            Usuario usuario = converter.toEntity(usuarioDto);
+            Usuario usuario = new Usuario();
+            usuario = converter.toEntity(usuarioDto);
             String senhaCriptografada = BcryptUtil.bcryptHash(usuario.getSenha());
             usuario.setSenha(senhaCriptografada);
             dao.persistAndFlush(usuario);

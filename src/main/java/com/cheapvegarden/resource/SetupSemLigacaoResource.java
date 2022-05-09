@@ -1,5 +1,6 @@
 package com.cheapvegarden.resource;
 
+import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -19,6 +20,7 @@ public class SetupSemLigacaoResource {
     @PUT
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value = { "user", "admin" })
     public Response alterarSetupSemLigacao(SetupSemLigacaoDto setupDto) throws Exception {
         return Response.ok(service.alterarSetupSemLigacao(setupDto)).build();
     }
@@ -26,6 +28,7 @@ public class SetupSemLigacaoResource {
     @GET
     @Transactional
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value = { "user", "admin" })
     public Response lerSetupSemLigacao() throws Exception {
         return Response.ok(service.lerSetupSemLigacao()).build();
     }

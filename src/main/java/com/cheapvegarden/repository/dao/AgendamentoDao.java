@@ -32,8 +32,10 @@ public class AgendamentoDao implements PanacheRepositoryBase<Agendamento, Long> 
 
     public void deletarAgendamentosDeUmaCultura(long culturaId) throws SQLException {
         try {
-            entityManager.createQuery(
-                    "DELETE FROM agendamento WHERE agendamento.cultura.id = :culturaId")
+            entityManager
+                    .createQuery(
+                            "DELETE FROM agendamento AS Agendamento " +
+                                    "WHERE Agendamento.cultura.id = :culturaId")
                     .setParameter("culturaId", culturaId)
                     .executeUpdate();
         } catch (Exception e) {

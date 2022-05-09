@@ -110,7 +110,6 @@ public class CulturaService {
             agendamentoService.deletarAgendamentosPorCultura(cultura.getId());
             dao.delete(cultura);
             setupService.deletar(cultura.getSetup());
-
         } catch (Exception e) {
             throw new Exception(e.getMessage(), e.getCause());
         }

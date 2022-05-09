@@ -12,7 +12,7 @@ public class CulturaDto {
 
     private long id;
 
-    @Size(max = 20)
+    @Size(max = 50)
     @NotNull
     private String nome;
 

@@ -1,5 +1,6 @@
 package com.cheapvegarden.resource;
 
+import javax.annotation.security.PermitAll;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -19,12 +20,14 @@ public class LogResource {
     @POST
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
+    @PermitAll
     public Response criar(LogDto logDto) throws Exception {
         return Response.ok(service.salvar(logDto)).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @PermitAll
     public Response ler() throws Exception {
         return Response.ok(service.listarLog()).build();
     }

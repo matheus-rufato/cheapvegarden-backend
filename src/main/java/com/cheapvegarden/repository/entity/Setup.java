@@ -13,7 +13,7 @@ import lombok.*;
 public class Setup {
 
     @Id
-    @JoinColumn(name = "id")
+    @Column(name = "id")
     @GeneratedValue(generator = "native", strategy = GenerationType.IDENTITY)
     private long id;
 

@@ -28,7 +28,7 @@ public class Cultura {
     private Setup setup;
 
     @Column(name = "nome")
-    @Size(max = 20)
+    @Size(max = 50)
     @NotNull
     private String nome;
 }

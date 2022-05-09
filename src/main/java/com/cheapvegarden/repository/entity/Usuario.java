@@ -7,16 +7,15 @@ import io.quarkus.security.jpa.Password;
 import io.quarkus.security.jpa.Roles;
 import io.quarkus.security.jpa.UserDefinition;
 import io.quarkus.security.jpa.Username;
-
 import lombok.*;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@UserDefinition
 @Entity
 @Table(name = "usuario")
-@UserDefinition
 public class Usuario {
 
     @Id
@@ -25,35 +24,31 @@ public class Usuario {
     private long id;
 
     @Column(name = "nome")
-    @Size(max = 50)
+    @Size(max = 100)
     @NotNull
     private String nome;
 
     @Column(name = "telefone")
-    @Size(max = 11)
+    @Size(max = 15, min = 11)
     @NotNull
     private String telefone;
 
-    @Column(name = "username")
-    @Size(max = 20)
-    @NotNull
-    @Username
-    private String username;
-
     @Column(name = "email")
-    @Size(max = 50)
+    @Username
+    @Size(max = 100)
     @Email
     @NotNull
     private String email;
 
     @Column(name = "senha")
-    @Size(max = 10, min = 8)
-    @NotNull
     @Password
+    @Size(min = 8)
+    @NotNull
     private String senha;
 
     @Column(name = "tipo")
-    @NotNull
     @Roles
+    @Size(max = 5, min = 4)
+    @NotNull
     private String tipo;
 }

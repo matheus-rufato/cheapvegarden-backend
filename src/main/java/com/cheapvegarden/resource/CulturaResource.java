@@ -1,5 +1,6 @@
 package com.cheapvegarden.resource;
 
+import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -24,6 +25,7 @@ public class CulturaResource {
     @Transactional
     @TransactionConfiguration(timeout = 900)
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value = { "user", "admin" })
     public Response criar(CulturaDto culturaDto) throws Exception {
         return Response.ok(service.salvar(culturaDto)).build();
     }
@@ -32,12 +34,14 @@ public class CulturaResource {
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{id}")
+    @RolesAllowed(value = { "user", "admin" })
     public Response alterarNome(@PathParam("id") long id, @Valid String nome) throws Exception {
         return Response.ok(service.alterarNomeCultura(id, nome)).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value = { "user", "admin" })
     public Response ler() throws Exception {
         return Response.ok(service.listarCulturas()).build();
     }
@@ -45,6 +49,7 @@ public class CulturaResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/buscarPorSetup/{setupId}")
+    @RolesAllowed(value = { "user", "admin" })
     public Response buscarCulturaPorSetup(@PathParam("setupId") long setupId) throws Exception {
         return Response.ok(service.buscarCulturaPorSetup(setupId)).build();
     }
@@ -53,6 +58,7 @@ public class CulturaResource {
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{id}")
+    @RolesAllowed(value = { "user", "admin" })
     public Response deletar(@PathParam("id") long id) throws Exception {
         service.deletarCultura(id);
         return Response.status(Status.OK).build();

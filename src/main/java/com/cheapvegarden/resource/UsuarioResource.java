@@ -1,6 +1,5 @@
 package com.cheapvegarden.resource;
 
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -11,7 +10,7 @@ import javax.ws.rs.core.*;
 import com.cheapvegarden.repository.dto.UsuarioDto;
 import com.cheapvegarden.service.UsuarioService;
 
-@Path("/user")
+@Path("/usuario")
 @ApplicationScoped
 public class UsuarioResource {
 
@@ -21,12 +20,14 @@ public class UsuarioResource {
     @POST
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed("admin")
     public Response criar(UsuarioDto usuarioDto) throws Exception {
         return Response.ok(service.salvar(usuarioDto)).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("admin")
     public Response readAll() throws Exception {
         return Response.ok(service.listarUsuarios()).build();
     }
@@ -34,6 +35,7 @@ public class UsuarioResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/searchName/{nome}")
+    @RolesAllowed("admin")
     public Response readUserByName(@PathParam("nome") String nome) throws Exception {
         return Response.ok(service.buscarUsuarioPorNome(nome)).build();
     }
@@ -41,6 +43,7 @@ public class UsuarioResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/searchId/{id}")
+    @RolesAllowed("admin")
     public Response readUserById(@PathParam("id") long id) throws Exception {
         return Response.ok(service.buscarUsuarioPorId(id)).build();
     }

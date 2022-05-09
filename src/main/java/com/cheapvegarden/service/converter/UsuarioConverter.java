@@ -18,7 +18,6 @@ public class UsuarioConverter implements Converter<Usuario, UsuarioDto> {
                 .id(entity.getId())
                 .nome(entity.getNome())
                 .telefone(entity.getTelefone())
-                .username(entity.getUsername())
                 .email(entity.getEmail())
                 .senha(entity.getSenha())
                 .tipo(entity.getTipo())
@@ -28,13 +27,12 @@ public class UsuarioConverter implements Converter<Usuario, UsuarioDto> {
     @Override
     public Usuario toEntity(UsuarioDto dto) throws IllegalAccessException {
         return Usuario.builder()
-                .id(1l)
+                .id(dto.getId())
                 .nome(dto.getNome())
                 .telefone(dto.getTelefone())
-                .username(dto.getUsername())
                 .email(dto.getEmail())
                 .senha(dto.getSenha())
-                .tipo("admin")
+                .tipo(dto.getTipo())
                 .build();
     }
 

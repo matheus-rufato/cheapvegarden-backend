@@ -23,20 +23,22 @@ public class ControleResource {
     @Transactional
     @TransactionConfiguration(timeout = 900)
     @Consumes(MediaType.APPLICATION_JSON)
+    @PermitAll
     public Response alterar(ControleDto controleDto) throws Exception {
         return Response.ok(service.alterar(controleDto)).build();
     }
 
     @GET
-    @PermitAll
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/lerStatusSolenoide")
+    @PermitAll
     public Response lerStatusSolenoide() throws Exception {
         return Response.ok(service.lerStatusSolenoide()).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @PermitAll
     public Response ler() throws Exception {
         return Response.ok(service.lerControle()).build();
     }
