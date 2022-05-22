@@ -12,8 +12,8 @@ import com.cheapvegarden.service.converter.LogConverter;
 
 @ApplicationScoped
 public class LogService {
-    
-    @Inject 
+
+    @Inject
     LogDao dao;
 
     @Inject

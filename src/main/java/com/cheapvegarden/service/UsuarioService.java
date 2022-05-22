@@ -1,10 +1,10 @@
 package com.cheapvegarden.service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.transaction.TransactionScoped;
 
 import com.cheapvegarden.repository.dao.UsuarioDao;
 import com.cheapvegarden.repository.dto.UsuarioDto;
@@ -22,7 +22,6 @@ public class UsuarioService {
     @Inject
     UsuarioConverter converter;
 
-    @TransactionScoped
     public UsuarioDto salvar(UsuarioDto usuarioDto) throws Exception {
 
         try {
@@ -41,10 +40,14 @@ public class UsuarioService {
         try {
             List<UsuarioDto> usuarioDtoList = new ArrayList<>();
             List<Usuario> usuarios = dao.listAll();
-            usuarioDtoList = converter.toDtoList(usuarios);
+            List<Usuario> usuarioList = usuarios.stream()
+                    .filter(item -> BcryptUtil.matches("teste@123", item.getSenha()))
+                    .collect(Collectors.toList());
+
+            usuarioDtoList = converter.toDtoList(usuarioList);
             return usuarioDtoList;
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new Exception(e.getMessage(), e.getCause());
         }
     }
 
@@ -55,17 +58,18 @@ public class UsuarioService {
             usuarioDtos = converter.toDtoList(usuarios);
             return usuarioDtos;
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new Exception(e.getMessage(), e.getCause());
         }
     }
 
     public UsuarioDto buscarUsuarioPorId(long id) throws Exception {
         try {
-            Usuario usuario = dao.findById(id);
+            Usuario usuario = dao.findByIdOptional(id)
+                    .orElseThrow(() -> new RuntimeException("Erro ao buscar usuário, Id: " + id + " inexistente"));
             UsuarioDto usuarioDto = converter.toDto(usuario);
             return usuarioDto;
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new Exception(e.getMessage(), e.getCause());
         }
     }
 }

@@ -7,17 +7,14 @@ import java.util.Objects;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.TransactionScoped;
+import javax.transaction.Transactional;
 
 import com.cheapvegarden.repository.dao.ControleDao;
 import com.cheapvegarden.repository.dto.AgendamentoDto;
 import com.cheapvegarden.repository.dto.ControleDto;
-import com.cheapvegarden.repository.dto.CulturaLeituraDto;
 import com.cheapvegarden.repository.entity.Controle;
 import com.cheapvegarden.service.converter.ControleConverter;
 
-import lombok.*;
-
-@Data
 @ApplicationScoped
 public class ControleService {
 
@@ -29,9 +26,6 @@ public class ControleService {
 
     @Inject
     AgendamentoService agendamentoService;
-
-    @Inject
-    CulturaService culturaService;
 
     @Inject
     SetupService setupService;
@@ -71,7 +65,7 @@ public class ControleService {
 
     public boolean lerStatusSolenoide() throws Exception {
         try {
-            boolean statusSolenoide = dao.buscarStatusSolenoide();
+            boolean statusSolenoide = dao.findAll().singleResult().isStatusSolenoide();
             return statusSolenoide;
         } catch (Exception e) {
             throw new Exception(e.getMessage(), e.getCause());
@@ -89,28 +83,29 @@ public class ControleService {
 
     }
 
-    public void controlarIrrigacaoPorAgendamento(LocalTime hora) throws Exception {
+    public void controlarIrrigacaoPorAgendamento(
+            LocalTime horaAtual,
+            long culturaId,
+            boolean desabilitarAgendamento) throws Exception {
+
         try {
 
-            CulturaLeituraDto culturaDto = culturaService.buscarCulturaAtiva();
-
             List<AgendamentoDto> agendamentoDtoList = agendamentoService
-                    .listarAgendamentosPorCultura(culturaDto.getId());
+                    .listarAgendamentosPorCultura(culturaId);
 
-            Boolean desabilitarAgendamento = dao.buscarDesabilitarAgendamento();
-            Boolean irrigacao = lerStatusSolenoide();
+            boolean irrigacao = lerStatusSolenoide();
 
-            Boolean iniciarIrrigacao = agendamentoDtoList
+            boolean iniciarIrrigacao = agendamentoDtoList
                     .stream()
-                    .anyMatch((agendamento) -> hora.isAfter(agendamento.getHoraInicio())
-                            && hora.isBefore(agendamento.getHoraFim()));
+                    .anyMatch((agendamento) -> horaAtual.isAfter(agendamento.getHoraInicio())
+                            && horaAtual.isBefore(agendamento.getHoraFim()));
 
             if (iniciarIrrigacao && !(desabilitarAgendamento) && !(irrigacao)) {
                 alterarStatus(true);
             } else if (!(iniciarIrrigacao) && !(desabilitarAgendamento) && irrigacao) {
                 alterarStatus(false);
             } else if (!(iniciarIrrigacao) && desabilitarAgendamento) {
-                dao.alterarDesabilitarAgendamento(false);
+                alterarDesabilitarAgendamento(false);
             }
 
         } catch (Exception e) {
@@ -120,10 +115,19 @@ public class ControleService {
 
     public boolean buscarDesabilitarAgendamento() {
         try {
-            boolean desabilitarAgendamento = dao.buscarDesabilitarAgendamento();
+            boolean desabilitarAgendamento = dao.findAll().singleResult().isDesabilitarAgendamento();
             return desabilitarAgendamento;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage(), e.getCause());
+        }
+    }
+
+    @Transactional
+    public void alterarDesabilitarAgendamento(boolean desabilitarAgendamento) throws Exception {
+        try {
+            dao.alterarDesabilitarAgendamento(desabilitarAgendamento);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage(), e.getCause());
         }
     }
 

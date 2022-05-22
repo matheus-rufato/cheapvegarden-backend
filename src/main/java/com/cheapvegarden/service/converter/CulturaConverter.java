@@ -34,7 +34,7 @@ public class CulturaConverter implements Converter<Cultura, CulturaDto> {
         return Cultura.builder()
                 .id(dto.getId())
                 .nome(dto.getNome())
-                .controle(Controle.builder().id(dto.getControleId()).build())
+                .controle(Controle.builder().id(1l).build())
                 .setup(Setup.builder().id(dto.getSetupDto().getId()).build())
                 .build();
     }

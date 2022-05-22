@@ -1,18 +1,16 @@
 package com.cheapvegarden.resource;
 
 import javax.annotation.security.RolesAllowed;
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.Response.*;
 
 import com.cheapvegarden.repository.dto.AgendamentoDto;
 import com.cheapvegarden.service.AgendamentoService;
 
 @Path("/agendamento")
-@ApplicationScoped
 public class AgendamentoResource {
 
     @Inject
@@ -23,7 +21,11 @@ public class AgendamentoResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed(value = { "user", "admin" })
     public Response criar(AgendamentoDto agendamentoDto) throws Exception {
-        return Response.ok(service.salvar(agendamentoDto)).build();
+        try {
+            return Response.ok(service.salvar(agendamentoDto)).build();
+        } catch (Exception e) {
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
 
     @GET
@@ -31,7 +33,11 @@ public class AgendamentoResource {
     @Path("/{culturaId}")
     @RolesAllowed(value = { "user", "admin" })
     public Response lerAgendamentosPorCultura(@PathParam("culturaId") long culturaId) throws Exception {
-        return Response.ok(service.listarAgendamentosPorCultura(culturaId)).build();
+        try {
+            return Response.ok(service.listarAgendamentosPorCultura(culturaId)).build();
+        } catch (Exception e) {
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
 
     @DELETE
@@ -40,8 +46,12 @@ public class AgendamentoResource {
     @Path("/{id}")
     @RolesAllowed(value = { "user", "admin" })
     public Response deletar(@PathParam("id") long id) throws Exception {
-        service.deletarAgendamento(id);
-        return Response.ok(Status.OK).build();
+        try {
+            service.deletarAgendamento(id);
+            return Response.ok(Status.OK).build();
+        } catch (Exception e) {
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
 
     @DELETE
@@ -50,7 +60,11 @@ public class AgendamentoResource {
     @Path("/deletarAgendamentos/{culturaId}")
     @RolesAllowed(value = { "user", "admin" })
     public Response deletarAgendamentosPorCultura(@PathParam("culturaId") long culturaId) throws Exception {
-        service.deletarAgendamentosPorCultura(culturaId);
-        return Response.ok(Status.OK).build();
+        try {
+            service.deletarAgendamentosPorCultura(culturaId);
+            return Response.ok(Status.OK).build();
+        } catch (Exception e) {
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
 }

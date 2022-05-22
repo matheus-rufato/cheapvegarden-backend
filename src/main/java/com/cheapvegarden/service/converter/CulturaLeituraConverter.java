@@ -40,5 +40,4 @@ public class CulturaLeituraConverter implements Converter<Cultura, CulturaLeitur
         entityList.forEach(entity -> culturaLeituraDtoList.add(toDto(entity)));
         return culturaLeituraDtoList;
     }
-
 }

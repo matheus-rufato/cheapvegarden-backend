@@ -16,6 +16,7 @@ public class LogConverter implements Converter<Log, LogDto> {
     @Override
     public LogDto toDto(Log entity) {
         return LogDto.builder()
+                .id(entity.getId())
                 .hora(entity.getHora())
                 .fluxo(entity.getFluxo())
                 .temperaturaClima(entity.getTemperaturaClima())
@@ -27,6 +28,7 @@ public class LogConverter implements Converter<Log, LogDto> {
     @Override
     public Log toEntity(LogDto dto) throws IllegalAccessException {
         return Log.builder()
+                .id((dto.getId()))
                 .hora(LocalTime.now())
                 .fluxo(dto.getFluxo())
                 .temperaturaClima(dto.getTemperaturaClima())

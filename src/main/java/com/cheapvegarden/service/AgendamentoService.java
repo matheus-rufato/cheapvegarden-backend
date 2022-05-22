@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.transaction.TransactionScoped;
+import javax.transaction.Transactional;
 
 import com.cheapvegarden.repository.dao.AgendamentoDao;
 import com.cheapvegarden.repository.dto.AgendamentoDto;
@@ -33,9 +33,11 @@ public class AgendamentoService {
         try {
             LocalTime horaInicio = agendamentoDto.getHoraInicio();
             LocalTime horaFim = agendamentoDto.getHoraFim();
+
             List<AgendamentoDto> agendamentos = listarAgendamentosPorCultura(agendamentoDto.getCulturaId());
 
             validacao.validarHoraFimDoAgendamento(horaInicio, horaFim);
+            validacao.validarSeAgendamentoEMaiorQueDuasHoras(horaInicio, horaFim);
 
             if (!agendamentos.isEmpty()) {
                 validacao.validarIntervaloEntreAgendamento(horaInicio, horaFim, agendamentos);
@@ -61,19 +63,20 @@ public class AgendamentoService {
         }
     }
 
-    public AgendamentoDto deletarAgendamento(long id) throws Exception {
+    public void deletarAgendamento(long id) throws Exception {
         try {
-            Agendamento agendamento = dao.findById(id);
+            Agendamento agendamento = dao.findByIdOptional(id)
+                    .orElseThrow(() -> new RuntimeException("Erro ao deletar agendamento, ID: " + id + " inexistente"));
             dao.delete(agendamento);
-            return converter.toDto(agendamento);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
     }
 
-    @TransactionScoped
+    @Transactional
     public void deletarAgendamentosPorCultura(long culturaId) throws Exception {
         try {
+            culturaValidacao.validarSeIdDaCulturaExiste(culturaId);
             dao.deletarAgendamentosDeUmaCultura(culturaId);
         } catch (Exception e) {
             throw new Exception(e.getMessage(), e.getCause());

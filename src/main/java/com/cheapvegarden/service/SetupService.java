@@ -1,11 +1,10 @@
 package com.cheapvegarden.service;
 
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.transaction.TransactionScoped;
+import javax.transaction.Transactional;
 
 import com.cheapvegarden.repository.dao.SetupDao;
 import com.cheapvegarden.repository.dto.SetupDto;
@@ -41,7 +40,7 @@ public class SetupService {
     @Inject
     SetupValidacao validacao;
 
-    @TransactionScoped
+    @Transactional
     public SetupDto salvar(SetupDto setupDto) throws Exception {
         try {
             int umidadeMaxima = setupDto.getUmidadeMaxima();
@@ -69,7 +68,7 @@ public class SetupService {
 
             validacao.validarSeUmidadeMaximaEMaiorQueUmidadeMinima(umidadeMaxima, umidadeMinima);
 
-            Setup setupListado = dao.findById(id);
+            SetupDto setupListado = buscarSetupPorId(id);
 
             if (setupDto.isStatus() && !(setupListado.isStatus())) {
                 alterarStatus();
@@ -79,9 +78,9 @@ public class SetupService {
 
             setupListado = atribuirValores(setupDto, setupListado);
 
-            dao.persistAndFlush(setupListado);
+            dao.persistAndFlush(converter.toEntity(setupListado));
 
-            return converter.toDto(setupListado);
+            return setupListado;
         } catch (Exception e) {
             throw new Exception(e.getMessage(), e.getCause());
         }
@@ -89,17 +88,25 @@ public class SetupService {
 
     public UmidadesETipoControleDto listarUmidadeMaximaMinimaETipoDeControle() throws Exception {
         try {
-            UmidadesETipoControleDto umidadesETipoControleDto = new UmidadesETipoControleDto();
-            umidadesETipoControleDto = umidadesETipoControleConverter.toDto(dao.buscarSetupAtivo());
 
+            UmidadesETipoControleDto umidadesETipoControleDto = new UmidadesETipoControleDto();
+
+            Setup setup = dao.buscarSetupAtivo();
             boolean desabilitarAgendamento = controleService.buscarDesabilitarAgendamento();
 
-            if (!umidadesETipoControleDto.isTipoControle() || desabilitarAgendamento) {
-                controleService
-                        .controlarIrrigacaoPorAgendamento(
-                                LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))));
+            if (setup.getId() != 1l) {
+                long culturaId = culturaService.buscarCulturaPorSetup(setup.getId()).getId();
+
+                LocalTime horaAtual = LocalTime.now();
+
+                if (!setup.isTipoControle() || desabilitarAgendamento) {
+                    controleService.controlarIrrigacaoPorAgendamento(horaAtual, culturaId, desabilitarAgendamento);
+                }
+            } else if (desabilitarAgendamento) {
+                controleService.alterarDesabilitarAgendamento(false);
             }
 
+            umidadesETipoControleDto = umidadesETipoControleConverter.toDto(setup);
             return umidadesETipoControleDto;
         } catch (Exception e) {
             throw new Exception(e.getMessage(), e.getCause());
@@ -124,7 +131,8 @@ public class SetupService {
 
     public SetupDto buscarSetupPorId(Long id) throws Exception {
         try {
-            Setup setup = dao.findById(id);
+            Setup setup = dao.findByIdOptional(id)
+                    .orElseThrow(() -> new RuntimeException("Erro ao buscar Setup, ID: " + id + " inexistente"));
             return converter.toDto(setup);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -140,7 +148,7 @@ public class SetupService {
         }
     }
 
-    @TransactionScoped
+    @Transactional
     public void deletar(Setup setup) throws Exception {
         try {
             if (setup.isStatus()) {
@@ -152,7 +160,7 @@ public class SetupService {
         }
     }
 
-    private Setup atribuirValores(SetupDto setupDto, Setup setupListado) throws Exception {
+    private SetupDto atribuirValores(SetupDto setupDto, SetupDto setupListado) throws Exception {
         try {
             setupListado.setStatus(setupDto.isStatus());
             setupListado.setTipoControle(setupDto.isTipoControle());

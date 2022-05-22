@@ -22,7 +22,6 @@ public class SetupSemLigacaoService {
     @Inject
     SetupValidacao validacao;
 
-    @Transactional
     public SetupSemLigacaoDto alterarSetupSemLigacao(SetupSemLigacaoDto setupDto) throws Exception {
         try {
             int umidadeMaxima = setupDto.getUmidadeMaxima();
@@ -53,6 +52,7 @@ public class SetupSemLigacaoService {
         }
     }
 
+    @Transactional
     public void salvarPrimeiroSetup() throws Exception {
         try {
             SetupSemLigacaoDto setupDto = new SetupSemLigacaoDto();
