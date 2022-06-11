@@ -24,7 +24,7 @@ public class SetupResource {
     @TransactionConfiguration(timeout = 900)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    @RolesAllowed(value = { "user", "admin" })
+    @PermitAll
     public Response alterar(@PathParam("id") long id, @Valid SetupDto setupDto) throws Exception {
         try {
             return Response.ok(service.alterar(id, setupDto)).build();
@@ -50,7 +50,7 @@ public class SetupResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    @RolesAllowed(value = { "user", "admin" })
+    @PermitAll
     public Response lerSetupPorId(@PathParam("id") long id) throws Exception {
         try {
             return Response.ok(service.buscarSetupPorId(id)).build();
@@ -61,7 +61,7 @@ public class SetupResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed(value = { "user", "admin" })
+    @PermitAll
     public Response buscarSetupAtivo() throws Exception {
         try {
             return Response.ok(service.buscarSetupAtivo()).build();

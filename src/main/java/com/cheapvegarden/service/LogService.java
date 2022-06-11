@@ -38,4 +38,14 @@ public class LogService {
             throw new Exception(e.getMessage());
         }
     }
+
+    public List<LogDto> listarUltimosRegistros(int quantidade) throws Exception {
+        try {
+            List<Log> logList = dao.buscarUltimosDozeRegistro(quantidade);
+            List<LogDto> logDtoList = converter.toDtoList(logList);
+            return logDtoList;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
 }

@@ -1,6 +1,8 @@
 package com.cheapvegarden.repository.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import javax.validation.constraints.*;
@@ -16,6 +18,8 @@ public class LogDto {
     private long id;
 
     private LocalTime hora;
+
+    private LocalDate data;
 
     @PositiveOrZero
     @Digits(integer = 3, fraction = 2)

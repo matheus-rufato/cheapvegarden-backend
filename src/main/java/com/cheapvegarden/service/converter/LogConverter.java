@@ -1,5 +1,6 @@
 package com.cheapvegarden.service.converter;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ public class LogConverter implements Converter<Log, LogDto> {
         return LogDto.builder()
                 .id(entity.getId())
                 .hora(entity.getHora())
+                .data(entity.getData())
                 .fluxo(entity.getFluxo())
                 .temperaturaClima(entity.getTemperaturaClima())
                 .umidadeClima(entity.getUmidadeClima())
@@ -30,6 +32,7 @@ public class LogConverter implements Converter<Log, LogDto> {
         return Log.builder()
                 .id((dto.getId()))
                 .hora(LocalTime.now())
+                .data(LocalDate.now())
                 .fluxo(dto.getFluxo())
                 .temperaturaClima(dto.getTemperaturaClima())
                 .umidadeClima(dto.getUmidadeClima())

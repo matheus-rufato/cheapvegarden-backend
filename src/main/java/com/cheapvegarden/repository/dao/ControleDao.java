@@ -18,4 +18,12 @@ public class ControleDao implements PanacheRepositoryBase<Controle, Long> {
             throw new Exception(e.getMessage(), e.getCause());
         }
     }
+
+    public void alterarStatusSolenoide(boolean statusSolenoide) throws Exception {
+        try {
+            update("statusSolenoide = ?1", statusSolenoide);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage(), e.getCause());
+        }
+    }
 }

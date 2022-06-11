@@ -6,7 +6,6 @@ import java.util.Objects;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.transaction.TransactionScoped;
 import javax.transaction.Transactional;
 
 import com.cheapvegarden.repository.dao.ControleDao;
@@ -14,6 +13,7 @@ import com.cheapvegarden.repository.dto.AgendamentoDto;
 import com.cheapvegarden.repository.dto.ControleDto;
 import com.cheapvegarden.repository.entity.Controle;
 import com.cheapvegarden.service.converter.ControleConverter;
+import com.cheapvegarden.service.validator.SetupValidacao;
 
 @ApplicationScoped
 public class ControleService {
@@ -31,7 +31,7 @@ public class ControleService {
     SetupService setupService;
 
     @Inject
-    SetupSemLigacaoService setupSemLigacaoService;
+    SetupValidacao setupValidacao;
 
     public ControleDto alterar(ControleDto controleDto) throws Exception {
 
@@ -40,21 +40,10 @@ public class ControleService {
             Controle controle = dao.findAll().firstResult();
 
             if (Objects.nonNull(controle)) {
-
-                boolean tipoDeControle = setupService.buscarTipoControle();
-
-                if (Objects.nonNull(tipoDeControle)) {
-                    boolean statusSolenoideRequisicao = controleDto.isStatusSolenoide();
-                    boolean statusSolenoideLeitura = controle.isStatusSolenoide();
-
-                    if (!(statusSolenoideRequisicao) && statusSolenoideLeitura && !(tipoDeControle)) {
-                        controle.setDesabilitarAgendamento(true);
-                    }
-                }
                 controle = atribuirValores(controle, controleDto);
             } else {
                 controle = converter.toEntity(controleDto);
-                setupSemLigacaoService.salvarPrimeiroSetup();
+                setupService.salvarPrimeiroSetup();
             }
             dao.persistAndFlush(controle);
             return converter.toDto(controle);
@@ -85,8 +74,7 @@ public class ControleService {
 
     public void controlarIrrigacaoPorAgendamento(
             LocalTime horaAtual,
-            long culturaId,
-            boolean desabilitarAgendamento) throws Exception {
+            long culturaId) throws Exception {
 
         try {
 
@@ -100,12 +88,10 @@ public class ControleService {
                     .anyMatch((agendamento) -> horaAtual.isAfter(agendamento.getHoraInicio())
                             && horaAtual.isBefore(agendamento.getHoraFim()));
 
-            if (iniciarIrrigacao && !(desabilitarAgendamento) && !(irrigacao)) {
-                alterarStatus(true);
-            } else if (!(iniciarIrrigacao) && !(desabilitarAgendamento) && irrigacao) {
-                alterarStatus(false);
-            } else if (!(iniciarIrrigacao) && desabilitarAgendamento) {
-                alterarDesabilitarAgendamento(false);
+            if (iniciarIrrigacao && !(irrigacao)) {
+                alterarStatusSolenoide(true);
+            } else if (!(iniciarIrrigacao) && irrigacao) {
+                alterarStatusSolenoide(false);
             }
 
         } catch (Exception e) {
@@ -113,30 +99,11 @@ public class ControleService {
         }
     }
 
-    public boolean buscarDesabilitarAgendamento() {
-        try {
-            boolean desabilitarAgendamento = dao.findAll().singleResult().isDesabilitarAgendamento();
-            return desabilitarAgendamento;
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage(), e.getCause());
-        }
-    }
-
     @Transactional
-    public void alterarDesabilitarAgendamento(boolean desabilitarAgendamento) throws Exception {
+    public void alterarStatusSolenoide(boolean statusSolenoide) throws Exception {
         try {
-            dao.alterarDesabilitarAgendamento(desabilitarAgendamento);
-        } catch (Exception e) {
-            throw new Exception(e.getMessage(), e.getCause());
-        }
-    }
-
-    @TransactionScoped
-    private void alterarStatus(boolean statusSolenoide) throws Exception {
-        try {
-            Controle controle = dao.findAll().singleResult();
-            controle.setStatusSolenoide(statusSolenoide);
-            dao.persistAndFlush(controle);
+            setupValidacao.validarSeTipoControleEstaFalso();
+            dao.alterarStatusSolenoide(statusSolenoide);
         } catch (Exception e) {
             throw new Exception(e.getMessage(), e.getCause());
         }

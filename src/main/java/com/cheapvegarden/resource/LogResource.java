@@ -38,4 +38,17 @@ public class LogResource {
             return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{quantidade}")
+    @PermitAll
+    public Response lerUltimosRegistros(@PathParam("quantidade") int quantidade) throws Exception {
+        try {
+            return Response.ok(service.listarUltimosRegistros(quantidade)).build();
+        } catch (Exception e) {
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+
 }

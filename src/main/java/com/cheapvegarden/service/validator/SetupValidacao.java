@@ -33,4 +33,17 @@ public class SetupValidacao {
             throw new Exception("Umidade máxima menor ou igual a umidade mínima");
         }
     }
+
+    public void validarSeNaoEstaAlterandoStatusDoSetupSemLigacao(long id, boolean status) throws Exception {
+        if (id == 1l && !status) {
+            throw new Exception("Alterando o status do Setup sem cultura");
+        }
+    }
+
+    public void validarSeTipoControleEstaFalso() throws Exception {
+        Setup setup = dao.buscarSetupAtivo();
+        if (setup.isTipoControle()) {
+            throw new Exception("Alterando o status da Solénoide no modo automático");
+        }
+    }
 }

@@ -1,6 +1,6 @@
 package com.cheapvegarden.resource;
 
-import javax.annotation.security.RolesAllowed;
+import javax.annotation.security.PermitAll;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
@@ -19,7 +19,7 @@ public class AgendamentoResource {
     @POST
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed(value = { "user", "admin" })
+    @PermitAll
     public Response criar(AgendamentoDto agendamentoDto) throws Exception {
         try {
             return Response.ok(service.salvar(agendamentoDto)).build();
@@ -31,7 +31,7 @@ public class AgendamentoResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{culturaId}")
-    @RolesAllowed(value = { "user", "admin" })
+    @PermitAll
     public Response lerAgendamentosPorCultura(@PathParam("culturaId") long culturaId) throws Exception {
         try {
             return Response.ok(service.listarAgendamentosPorCultura(culturaId)).build();
@@ -44,7 +44,7 @@ public class AgendamentoResource {
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    @RolesAllowed(value = { "user", "admin" })
+    @PermitAll
     public Response deletar(@PathParam("id") long id) throws Exception {
         try {
             service.deletarAgendamento(id);
@@ -58,7 +58,7 @@ public class AgendamentoResource {
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/deletarAgendamentos/{culturaId}")
-    @RolesAllowed(value = { "user", "admin" })
+    @PermitAll
     public Response deletarAgendamentosPorCultura(@PathParam("culturaId") long culturaId) throws Exception {
         try {
             service.deletarAgendamentosPorCultura(culturaId);

@@ -31,6 +31,20 @@ public class ControleResource {
         }
     }
 
+    @PUT
+    @Transactional
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/alterarStatusSolenoide")
+    @PermitAll
+    public Response alterarStatusSolenoide(boolean statusSolenoide) {
+        try {
+            service.alterarStatusSolenoide(statusSolenoide);
+            return Response.ok(Status.OK).build();
+        } catch (Exception e) {
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/lerStatusSolenoide")

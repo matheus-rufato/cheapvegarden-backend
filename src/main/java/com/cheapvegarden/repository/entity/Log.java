@@ -1,6 +1,8 @@
 package com.cheapvegarden.repository.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import javax.persistence.*;
@@ -23,6 +25,10 @@ public class Log {
     @Column(name = "hora")
     @NotNull
     private LocalTime hora;
+
+    @Column(name = "data")
+    @NotNull
+    private LocalDate data;
 
     @Column(name = "fluxo")
     @PositiveOrZero

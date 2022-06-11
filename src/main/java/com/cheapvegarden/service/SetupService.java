@@ -8,11 +8,9 @@ import javax.transaction.Transactional;
 
 import com.cheapvegarden.repository.dao.SetupDao;
 import com.cheapvegarden.repository.dto.SetupDto;
-import com.cheapvegarden.repository.dto.SetupSemLigacaoDto;
 import com.cheapvegarden.repository.dto.UmidadesETipoControleDto;
 import com.cheapvegarden.repository.entity.Setup;
 import com.cheapvegarden.service.converter.SetupConverter;
-import com.cheapvegarden.service.converter.SetupSemLigacaoConverter;
 import com.cheapvegarden.service.converter.UmidadesETipoControleConverter;
 import com.cheapvegarden.service.validator.SetupValidacao;
 
@@ -27,9 +25,6 @@ public class SetupService {
 
     @Inject
     UmidadesETipoControleConverter umidadesETipoControleConverter;
-
-    @Inject
-    SetupSemLigacaoConverter setupSemLigacaoConverter;
 
     @Inject
     ControleService controleService;
@@ -61,14 +56,30 @@ public class SetupService {
         }
     }
 
+    @Transactional
+    public void salvarPrimeiroSetup() throws Exception {
+        try {
+            SetupDto setupDto = new SetupDto();
+            setupDto.setUmidadeMaxima(60);
+            setupDto.setUmidadeMinima(50);
+            setupDto.setStatus(true);
+            Setup setup = converter.toEntity(setupDto);
+            dao.persistAndFlush(setup);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage(), e.getCause());
+        }
+    }
+
     public SetupDto alterar(long id, SetupDto setupDto) throws Exception {
         try {
             int umidadeMaxima = setupDto.getUmidadeMaxima();
             int umidadeMinima = setupDto.getUmidadeMinima();
 
+            validacao.validarSeNaoEstaAlterandoStatusDoSetupSemLigacao(id, setupDto.isStatus());
             validacao.validarSeUmidadeMaximaEMaiorQueUmidadeMinima(umidadeMaxima, umidadeMinima);
 
-            SetupDto setupListado = buscarSetupPorId(id);
+            Setup setupListado = dao.findByIdOptional(id)
+                    .orElseThrow(() -> new RuntimeException("Erro ao alterar Setup, ID: " + id + " inexistente"));
 
             if (setupDto.isStatus() && !(setupListado.isStatus())) {
                 alterarStatus();
@@ -78,9 +89,9 @@ public class SetupService {
 
             setupListado = atribuirValores(setupDto, setupListado);
 
-            dao.persistAndFlush(converter.toEntity(setupListado));
+            dao.persistAndFlush(setupListado);
 
-            return setupListado;
+            return converter.toDto(setupListado);
         } catch (Exception e) {
             throw new Exception(e.getMessage(), e.getCause());
         }
@@ -92,18 +103,12 @@ public class SetupService {
             UmidadesETipoControleDto umidadesETipoControleDto = new UmidadesETipoControleDto();
 
             Setup setup = dao.buscarSetupAtivo();
-            boolean desabilitarAgendamento = controleService.buscarDesabilitarAgendamento();
 
-            if (setup.getId() != 1l) {
+            if (setup.getId() != 1l && !(setup.isTipoControle())) {
                 long culturaId = culturaService.buscarCulturaPorSetup(setup.getId()).getId();
-
                 LocalTime horaAtual = LocalTime.now();
 
-                if (!setup.isTipoControle() || desabilitarAgendamento) {
-                    controleService.controlarIrrigacaoPorAgendamento(horaAtual, culturaId, desabilitarAgendamento);
-                }
-            } else if (desabilitarAgendamento) {
-                controleService.alterarDesabilitarAgendamento(false);
+                controleService.controlarIrrigacaoPorAgendamento(horaAtual, culturaId);
             }
 
             umidadesETipoControleDto = umidadesETipoControleConverter.toDto(setup);
@@ -113,7 +118,7 @@ public class SetupService {
         }
     }
 
-    public Object buscarSetupAtivo() throws Exception {
+    public SetupDto buscarSetupAtivo() throws Exception {
         try {
             Setup setup = dao.buscarSetupAtivo();
 
@@ -121,8 +126,8 @@ public class SetupService {
                 SetupDto setupDto = converter.toDto(setup);
                 return setupDto;
             } else {
-                SetupSemLigacaoDto setupSemLigacaoDto = setupSemLigacaoConverter.toDto(setup);
-                return setupSemLigacaoDto;
+                SetupDto setupDto = converter.toDto(setup);
+                return setupDto;
             }
         } catch (Exception e) {
             throw new Exception(e.getMessage(), e.getCause());
@@ -160,7 +165,7 @@ public class SetupService {
         }
     }
 
-    private SetupDto atribuirValores(SetupDto setupDto, SetupDto setupListado) throws Exception {
+    private Setup atribuirValores(SetupDto setupDto, Setup setupListado) throws Exception {
         try {
             setupListado.setStatus(setupDto.isStatus());
             setupListado.setTipoControle(setupDto.isTipoControle());
@@ -176,7 +181,7 @@ public class SetupService {
     private void alterarStatus() throws Exception {
         try {
             Setup setup = dao.buscarSetupAtivo();
-            setup.setStatus(Boolean.FALSE);
+            setup.setStatus(false);
             dao.persist(setup);
         } catch (Exception e) {
             throw new Exception(e.getMessage(), e.getCause());
